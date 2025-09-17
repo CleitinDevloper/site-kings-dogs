@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, minimum-scale=0.3, maximum-scale=3.0, user-scalable=yes">
+  <title>King's Dogs</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <img src="https://i.imgur.com/5AFEmqk.png" alt="Logo Loja" class="logo"/>
+    <h1>King’s Dogs</h1>
+    <nav>
+      <ul>
+        <li><a href="#" class="tab-link active" data-tab="sobre-nos">Sobre nós</a></li>
+        <li><a href="#" class="tab-link" data-tab="produtos">Produtos</a></li>
+        <li><a href="#" class="tab-link" data-tab="carrinho">Carrinho</a></li>
+        <li><a href="#" class="tab-link" data-tab="login">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div id="sobre-nos" class="tab-content active">
+      <div class="button-style-1">
+        <div class="img-icons">
+          <img src="https://i.imgur.com/5AFEmqk.png" alt="Logo Loja" class="logo"/>
+        </div>
+        <h2>King’s Dogs – "O Sabor que Une Tradição e Sustentabilidade"</h2>
+        <div class="about">
+          <p>
+            A <span class="bolder">King’s Dogs</span>, empresa do <span class="bolder">Colégio Alicerce</span>, nasceu com o propósito de transformar o simples ato de saborear um cachorro-quente em uma experiência única e inesquecível. Nosso foco é oferecer produtos de qualidade, preparados com carinho e inspirados no verdadeiro sabor da comida caseira.
+            Mais do que um lanche, cada cachorro-quente da King’s Dogs carrega o compromisso de unir sabor, tradição e responsabilidade. Valorizamos práticas sustentáveis em todas as etapas de produção, desde a escolha dos ingredientes até o descarte consciente dos resíduos, contribuindo assim para a preservação do meio ambiente.
+            Combinamos inovação, dedicação e respeito ao planeta para oferecer não apenas uma refeição, mas uma causa: provar que é possível comer bem e, ao mesmo tempo, cuidar do futuro.
+            Na King’s Dogs, acreditamos que cada detalhe importa porque o melhor sabor é aquele que alimenta o corpo, alegra a alma e ajuda a salvar o mundo.
+          </p>
+          <a href="#" class="tab-link" style="color: white; text-decoration: none;" data-tab="produtos"><button class="login button">VEJÁ NOSSOS PRODUTOS</button></a>
+        </div>
+      </div>
+    </div>
+
+    <div id="produtos" class="tab-content">
+      <h2>Produtos</h2>
+      <div class="products">
+        <div class="product" data-id="1" data-name="Produto 1" data-price="10.00">
+          <img
+            src="https://via.placeholder.com/250x150?text=Produto+1"
+            alt="Produto 1"
+          />
+          <h3>Produto 1</h3>
+          <p>Descrição do produto 1.</p>
+          <p>Preço: R$ 10.00</p>
+          <button onclick="addToCart(1)">Adicionar ao Carrinho</button>
+        </div>
+        <div class="product" data-id="2" data-name="Produto 2" data-price="20.00">
+          <img
+            src="https://via.placeholder.com/250x150?text=Produto+2"
+            alt="Produto 2"
+          />
+          <h3>Produto 2</h3>
+          <p>Descrição do produto 2.</p>
+          <p>Preço: R$ 20.00</p>
+          <button onclick="addToCart(2)">Adicionar ao Carrinho</button>
+        </div>
+        <div class="product" data-id="3" data-name="Produto 3" data-price="30.00">
+          <img
+            src="https://via.placeholder.com/250x150?text=Produto+3"
+            alt="Produto 3"
+          />
+          <h3>Produto 3</h3>
+          <p>Descrição do produto 3.</p>
+          <p>Preço: R$ 30.00</p>
+          <button onclick="addToCart(3)">Adicionar ao Carrinho</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="carrinho" class="tab-content">
+      <h2>Carrinho</h2>
+      <div class="cart">
+        <div id="cart-items"></div>
+        <p><span class="bolder">Total: </span> R$<span id="total">0.00</span></p>
+        <div class="button-style-1">
+          <button class="login button">Finalizar Compra</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="login" class="tab-content">
+      <h2>Login</h2>
+      <p>Apenas para pessoas relacionadas a empresa</p>
+      <div class="login">
+        <input type="text" style="text-align: center;" placeholder="Usuário" id="username" />
+        <input type="password" style="text-align: center;" placeholder="Senha" id="password" />
+        <button onclick="login()">Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

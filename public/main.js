@@ -64,8 +64,9 @@
 
         const data = await res.json()
 
-        if (data.status == "sucess"){
+        if (data.status == "success"){
           token = data.autorization;
+          window.location.href = data.redirect;
         } else{
           console.log(data.message);
         };
@@ -78,12 +79,22 @@
       link.addEventListener('click', function (e) {
         e.preventDefault();
         const tab = this.getAttribute('data-tab');
+
+        if (this.classList.contains('active')) return;
+
         document.querySelectorAll('.tab-content').forEach((content) => {
           content.classList.remove('active');
         });
         document.querySelectorAll('.tab-link').forEach((link) => {
           link.classList.remove('active');
         });
+
+        const tabName = this.getAttribute('data-name');
+
+        if (tabName == "produtos"){
+          
+        }
+
         document.getElementById(tab).classList.add('active');
         this.classList.add('active');
       });

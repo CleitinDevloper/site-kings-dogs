@@ -1,40 +1,93 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const mysql = require("mysql2");
 const app = express();
 const port = 8080;
-const __dirname = path.resolve();
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
-app.use("/admin", express.static(path.join(__dirname, "admin")));
 
-const connection = mysql.createConnection({
-    host: "mysql",
-    user: "Admin",
-    password: "CAsa0987",
-    database: "database"
-});
+// Array com queries para criar tabelas
+const tablesToCreate = [
+    `CREATE TABLE IF NOT EXISTS funcionarios (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        usuario VARCHAR(255) NOT NULL UNIQUE,
+        senha VARCHAR(255) NOT NULL,
+        token VARCHAR(255) NOT NULL UNIQUE,
+        nome VARCHAR(50) NOT NULL,
+        numero INT NOT NULL,
+        vendas INT NOT NULL,
+        cargo VARCHAR(255) NOT NULL
+    );`, 
+    `CREATE TABLE IF NOT EXISTS produtos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        img VARCHAR(255) NOT NULL,
+        produto_name VARCHAR(255) NOT NULL,
+        produto_desc VARCHAR(255) NOT NULL,
+        produto_price INT NOT NULL,
+        quantidade INT NOT NULL
+    );`
+];
 
-connection.connect((err) => {
-    if (err) {
-        console.error("Erro ao conectar ao MySQL:", err);
-        return;
+const connection = mysql.createPool({
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+}).promise();
+
+async function createTables(tables) {
+  for (let i = 0; i < tables.length; i++) {
+    try {
+      await connection.query(tables[i]);
+      console.log(`Tabela ${i + 1} criada ou já existe.`);
+    } catch (err) {
+      console.error(`Erro criando tabela ${i + 1}:`, err);
     }
-    console.log("Conectado ao MySQL!");
-});
-
-const userList = {
-   ["Cleitin"]: {
-    password: "123456",
-    token: "GkNfvr_JLeXjdIYRmVgSetSssxLwRI",
-    role: "admin"
-   } 
+  }
 }
 
-const tokensList = {
-    ["GkNfvr_JLeXjdIYRmVgSetSssxLwRI"]: "Cleitin"
+(async () => {
+  await createTables(tablesToCreate);
+})();
+
+let userList = {};
+let tokensList = {};
+let items = {};
+
+async function updateDataServer(){
+  try {
+    const [produtos] = await connection.query(`SELECT * FROM produtos`);
+    const [funcionarios] = await connection.query(`SELECT * FROM funcionarios`);
+    funcionarios.forEach(x => {
+        userList[x.usuario] = {
+            password: x.senha,
+            token: x.token,
+            nome: x.nome,
+            numero: x.numero,
+            vendas: x.vendas,
+            role: x.cargo
+        };
+
+        tokensList[x.token] = x.usuario;
+    });
+
+    produtos.forEach(x => {
+        items[x.id] = {
+            nome: x.produto_name,
+            quantidade: x.quantidade
+        };
+    });
+  } catch (err) {
+    console.error("Erro SQL:", err);
+  }
 }
+
+updateDataServer();
 
 function verifyToken(req, res, next) {
     const token = req.query.token || req.headers["x-access-token"];
@@ -46,44 +99,52 @@ function verifyToken(req, res, next) {
     }
 }
 
+app.post("/getItems" , (req, res) => {
+    if (items) {
+        return res.json({ status: "success", items: items, message: "Lista de Items." })
+    }else {
+        return res.json({ status: "fail", message: "Nenhum item encontrado." })
+    }  
+})
+
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
 
     if (username && userList[username]){
-        if (password && userList[username].password == password){
+        if (password && userList[username].password === password){
             return res.json({
                 status: "success",
                 message: "Login realizado com sucesso",
-                redirect: `/admin/index.html?token=${userList[username].token}`,
+                redirect: `/admin?token=${userList[username].token}`,
                 token: userList[username].token
             });
         } else{
-            return res.json({ status: "fail", message: "Senha incorreta." })
-        };
+            return res.json({ status: "fail", message: "Usuário não encontrado." });
+        }
     } else{
-        return res.json({ status: "fail", message: "Usúario não encontrado." })
-    };
+        return res.json({ status: "fail", message: "Usuário não encontrado." });
+    }
 });
 
-app.get("/admin/index.html", verifyToken, (req, res) => {
+app.get("/admin", verifyToken, (req, res) => {
     res.sendFile(path.join(__dirname, "admin", "index.html"));
 });
 
 function generateToken(tokenSize){
-    const caracters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
-    var newToken = "";
+    const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
+    let newToken = "";
 
-    for(var i = 0; i < tokenSize; i++){
-        const randomNum = Math.floor(Math.random() * caracters.length)
-        const randomCaracter = caracters[randomNum];
-        if (randomCaracter) {
-            newToken = `${newToken}${randomCaracter}`;
-        };
-    };
+    for(let i = 0; i < tokenSize; i++){
+        const randomNum = Math.floor(Math.random() * characters.length);
+        const randomCharacter = characters[randomNum];
+        if (randomCharacter) {
+            newToken += randomCharacter;
+        }
+    }
 
     return newToken;
-};
+}
 
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
-})
+});

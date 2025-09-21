@@ -78,7 +78,11 @@ async function updateDataServer(){
 
     produtos.forEach(x => {
         items[x.id] = {
+            id: x.id,
+            img: x.img,
             nome: x.produto_name,
+            desc: x.produto_desc,
+            price: x.produto_price,
             quantidade: x.quantidade
         };
     });

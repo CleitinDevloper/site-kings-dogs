@@ -4,8 +4,8 @@ let storeItems = {};
 let cart = {};
 let total = 0;
 
-document.addEventListener("DOMContentLoaded", async () => {
-    const res = await fetch("/getItems", {
+async function updateItems(){
+      const res = await fetch("/getItems", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -16,19 +16,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await res.json()
 
     if (data.status == "success") {
-      const div = document.getElementById("products");
+      const div = document.getElementById("produtos");
       if (data.items){
-        data.items.forEach(x => {
+        div.innerHTML = `<h2>Produtos</h2>`
+        Object.values(data.items).forEach(x => {
           div.innerHTML = div.innerHTML + `
           <div class="products" id="products">
             <div class="product">
-              <img src="${x.img}" alt="Produto ${x.id}"/>
-              <h3>${x.name}</h3>
-              <p>${x.produto_desc}</p>
-              <p>Preço: ${x.produto_price}</p>
+              <img style="max-width: 150px; height: 150px" src="${x.img}" alt="Produto ${x.id}"/>
+              <h3>${x.nome}</h3>
+              <p>${x.desc}</p>
+              <p>Preço: ${x.price}.00 R$</p>
+              <p>Quantidade em Estoque: ${x.quantidade}</p>
               <button item-id="${x.id}" onclick="showObservacoesModal(${x.id}, ['Purê de batatas', 'Ketchup', 'Mostarda']).then(result => {
                 if (result) {
-                  alert('ID: ' + result.id + '\nRespostas: ' + JSON.stringify(result.respostas, null, 2));
+                  alert('ID: ' + result.id + ' Respostas: ' + JSON.stringify(result.respostas, null, 2));
                   console.log(result);
                 } else {
                   alert('Modal fechado sem enviar.');
@@ -42,6 +44,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       console.log(data.message);
     };
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await updateItems();
 })
 
 function addToCart(id) {
@@ -114,7 +120,7 @@ async function login() {
 };
 
 document.querySelectorAll('.tab-link').forEach((link) => {
-  link.addEventListener('click', function (e) {
+  link.addEventListener('click', async function (e) {
     e.preventDefault();
     const tab = this.getAttribute('data-tab');
 
@@ -130,7 +136,7 @@ document.querySelectorAll('.tab-link').forEach((link) => {
     const tabName = this.getAttribute('data-name');
 
     if (tabName == "produtos") {
-
+      await updateItems();
     }
 
     document.getElementById(tab).classList.add('active');
@@ -139,48 +145,39 @@ document.querySelectorAll('.tab-link').forEach((link) => {
 });
 
   (function(){
-    // Criar overlay e modal uma única vez e manter no DOM
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
 
     const modal = document.createElement('div');
     modal.className = 'modal-container';
 
-    // Título
     const title = document.createElement('h2');
     title.textContent = 'Observações';
     modal.appendChild(title);
 
-    // Container dos itens
     const container = document.createElement('div');
     modal.appendChild(container);
 
-    // Textarea para observações gerais
     const textarea = document.createElement('textarea');
     textarea.placeholder = 'Observações gerais...';
     modal.appendChild(textarea);
 
-    // Botão enviar
     const btnEnviar = document.createElement('button');
     btnEnviar.className = 'btn-send';
     btnEnviar.textContent = 'Enviar';
     modal.appendChild(btnEnviar);
 
-    // Adicionar ao body
     document.body.appendChild(overlay);
     document.body.appendChild(modal);
 
-    // Variáveis para controle da Promise
     let currentResolve = null;
     let currentId = null;
 
-    // Função para limpar modal (remover campos e textarea)
     function clearModal() {
       container.innerHTML = '';
       textarea.value = '';
     }
 
-    // Função para montar os campos com base na lista
     function buildFields(items) {
       items.forEach((item, index) => {
         const row = document.createElement('div');
@@ -235,7 +232,6 @@ document.querySelectorAll('.tab-link').forEach((link) => {
       });
     }
 
-    // Função para mostrar modal com id e items, retorna Promise
     window.showObservacoesModal = function(id, items) {
       return new Promise((resolve) => {
         currentResolve = resolve;
@@ -244,13 +240,11 @@ document.querySelectorAll('.tab-link').forEach((link) => {
         clearModal();
         buildFields(items);
 
-        // Mostrar modal e overlay
         modal.classList.add('show');
         overlay.classList.add('show');
       });
     };
 
-    // Evento botão enviar
     btnEnviar.addEventListener('click', () => {
       const respostas = {};
       const itemsCount = container.children.length;
@@ -268,11 +262,9 @@ document.querySelectorAll('.tab-link').forEach((link) => {
 
       respostas['observacoes_gerais'] = textarea.value.trim();
 
-      // Esconder modal e overlay
       modal.classList.remove('show');
       overlay.classList.remove('show');
 
-      // Resolver Promise com id e respostas
       if (currentResolve) {
         currentResolve({ id: currentId, respostas });
         currentResolve = null;
@@ -280,7 +272,6 @@ document.querySelectorAll('.tab-link').forEach((link) => {
       }
     });
 
-    // Fechar modal clicando no overlay
     overlay.addEventListener('click', () => {
       modal.classList.remove('show');
       overlay.classList.remove('show');

@@ -93,7 +93,7 @@ async function updateDataServer(){
             nome: x.produto_name,
             desc: x.produto_desc,
             price: x.produto_price,
-            obs: x.produto_obs,
+            obs: x.produto_obs ? JSON.parse(x.produto_obs) : null,
             quantidade: x.quantidade
         };
     });

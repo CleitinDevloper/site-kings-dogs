@@ -21,20 +21,21 @@ async function updateItems(){
         div.innerHTML = `<h2>Produtos</h2>`
         Object.values(data.items).forEach(x => {
           storeItems[x.id] = { nome: x.nome, price: x.price, img: x.img, desc: x.desc, quantidade: x.quantidade, obs: x.obs }
-
-          const div = document.getElementById("produtos");
-
-          const productDiv = document.createElement("div");
-          productDiv.className = "product";
-          productDiv.innerHTML = `
-            <img style="max-width:150px;height:150px" src="${x.img}" alt="Produto ${x.id}"/>
-            <h3>${x.nome}</h3>
-            <p>${x.desc}</p>
-            <p>Preço: ${x.price}.00 R$</p>
-            <p>Quantidade em Estoque: ${x.quantidade}</p>
-            <button class="add-to-cart" data-id="${x.id}">Adicionar ao Carrinho</button>
+          div.innerHTML = div.innerHTML + `
+          <div class="products" id="products">
+            <div class="product">
+              <img style="max-width: 150px; height: 150px" src="${x.img}" alt="Produto ${x.id}"/>
+              <h3>${x.nome}</h3>
+              <p>${x.desc}</p>
+              <p>Preço: ${x.price}.00 R$</p>
+              <p>Quantidade em Estoque: ${x.quantidade}</p>
+              <button item-id="${x.id}" onclick="showObservacoesModal(${x.id}).then(result => {
+                if (result) {
+                  addToCart(${x.id}, JSON.stringify(result.respostas, null, 2))
+                }});">Adicionar ao Carrinho</button>
+            </div>
+          </div>
           `;
-          div.appendChild(productDiv);
         });
       };
     } else {
@@ -72,7 +73,7 @@ function updateCart() {
                     <div class="cart-item">
                         <img style="width: 50px; height: 50px" src="${item.img}" alt="Produto 3"/>
                         <span>${item.nome} - R$ ${item.price}</span>
-                        <button class="remove-btn" data-index="${index}">Remover</button>
+                        <button onclick="removeFromCart(${index})">Remover</button>
                     </div>
                 `;
   });
@@ -291,19 +292,4 @@ document.querySelectorAll("#login button").forEach(btn => {
 
 document.querySelectorAll(".cart button").forEach(btn => {
   btn.addEventListener("click", tryPayment);
-});
-
-document.querySelectorAll(".add-to-cart").forEach(btn => {
-  btn.addEventListener("click", async () => {
-    const id = btn.dataset.id;
-    const result = await showObservacoesModal(id);
-    if (result) addToCart(id, JSON.stringify(result.respostas, null, 2));
-  });
-});
-
-document.querySelectorAll(".remove-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const index = btn.dataset.index;
-    removeFromCart(index);
-  });
 });

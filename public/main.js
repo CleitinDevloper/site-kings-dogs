@@ -218,7 +218,7 @@ document.querySelectorAll('.tab-link').forEach((link) => {
         const naoCheckbox = document.createElement('input');
         naoCheckbox.type = 'checkbox';
         naoCheckbox.id = naoId;
-        naoCheckbox.name = `item-${index}`;
+        naoCheckbox.name = `item-${item}`;
         naoCheckbox.value = 'nao';
 
         function toggleCheckboxes(e) {

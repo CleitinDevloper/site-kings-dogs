@@ -87,19 +87,22 @@ async function updateDataServer(){
     });
 
     produtos.forEach(x => {
-        try {
-            obs = JSON.parse(x.produto_obs);
-        } catch (e) {
-            console.warn("Obs não era JSON válido:", x.produto_obs);
-            obs = [];
-        }
+
+        var newObs = [];
+
+        x.produto_obs.forEach(y => {
+            newObs.push(y)
+        })
+
+        console.log(newObs)
+
         items[x.id] = {
             id: x.id,
             img: x.img,
             nome: x.produto_name,
             desc: x.produto_desc,
             price: x.produto_price,
-            obs: x.produto_obs ? JSON.parse(x.produto_obs) : null,
+            obs: x.produto_obs,
             quantidade: x.quantidade
         };
     });

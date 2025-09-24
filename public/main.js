@@ -29,7 +29,7 @@ async function updateItems(){
               <p>${x.desc}</p>
               <p>Preço: ${x.price}.00 R$</p>
               <p>Quantidade em Estoque: ${x.quantidade}</p>
-              <button item-id="${x.id}>Adicionar ao Carrinho</button>
+              <button class="add-to-cart" data-id="${x.id}>Adicionar ao Carrinho</button>
             </div>
           </div>
           `;
@@ -70,7 +70,7 @@ function updateCart() {
                     <div class="cart-item">
                         <img style="width: 50px; height: 50px" src="${item.img}" alt="Produto 3"/>
                         <span>${item.nome} - R$ ${item.price}</span>
-                        <button onclick="removeFromCart(${index})">Remover</button>
+                        <button class="remove-btn" data-index="${index}">Remover</button>
                     </div>
                 `;
   });

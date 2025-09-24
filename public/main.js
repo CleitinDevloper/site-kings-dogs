@@ -248,7 +248,7 @@ document.querySelectorAll('.tab-link').forEach((link) => {
           currentId = id;
 
           clearModal();
-          buildFields(storeItems[id]);
+          buildFields(storeItems[id].obs);
 
           modal.classList.add('show');
           overlay.classList.add('show');

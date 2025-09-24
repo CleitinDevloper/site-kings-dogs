@@ -200,8 +200,8 @@ document.querySelectorAll('.tab-link').forEach((link) => {
         const checkboxGroup = document.createElement('div');
         checkboxGroup.className = 'checkbox-group';
 
-        const simId = `sim-${item}`;
-        const naoId = `nao-${item}`;
+        const simId = `sim`;
+        const naoId = `nao`;
 
         const simLabel = document.createElement('label');
         simLabel.setAttribute('for', simId);
@@ -209,7 +209,7 @@ document.querySelectorAll('.tab-link').forEach((link) => {
         const simCheckbox = document.createElement('input');
         simCheckbox.type = 'checkbox';
         simCheckbox.id = simId;
-        simCheckbox.name = `item-${item}`;
+        simCheckbox.name = `item`;
         simCheckbox.value = 'sim';
 
         const naoLabel = document.createElement('label');
@@ -218,7 +218,7 @@ document.querySelectorAll('.tab-link').forEach((link) => {
         const naoCheckbox = document.createElement('input');
         naoCheckbox.type = 'checkbox';
         naoCheckbox.id = naoId;
-        naoCheckbox.name = `item-${item}`;
+        naoCheckbox.name = `item`;
         naoCheckbox.value = 'nao';
 
         function toggleCheckboxes(e) {
@@ -263,8 +263,8 @@ document.querySelectorAll('.tab-link').forEach((link) => {
       const itemsCount = container.children.length;
 
       for(let i = 0; i < itemsCount; i++) {
-        const sim = modal.querySelector(`#sim-${i}`);
-        const nao = modal.querySelector(`#nao-${i}`);
+        const sim = modal.querySelector(`#sim`);
+        const nao = modal.querySelector(`#nao`);
 
         const label = container.children[i].querySelector('.item-label').textContent;
 

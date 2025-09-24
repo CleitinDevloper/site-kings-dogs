@@ -188,7 +188,7 @@ document.querySelectorAll('.tab-link').forEach((link) => {
     }
 
     function buildFields(items) {
-      Object.values(items).forEach((item, index) => {
+      Object.values(items).forEach(item => {
         const row = document.createElement('div');
         row.className = 'item-row';
 
@@ -200,8 +200,8 @@ document.querySelectorAll('.tab-link').forEach((link) => {
         const checkboxGroup = document.createElement('div');
         checkboxGroup.className = 'checkbox-group';
 
-        const simId = `sim-${index}`;
-        const naoId = `nao-${index}`;
+        const simId = `sim-${item}`;
+        const naoId = `nao-${item}`;
 
         const simLabel = document.createElement('label');
         simLabel.setAttribute('for', simId);
@@ -209,7 +209,7 @@ document.querySelectorAll('.tab-link').forEach((link) => {
         const simCheckbox = document.createElement('input');
         simCheckbox.type = 'checkbox';
         simCheckbox.id = simId;
-        simCheckbox.name = `item-${index}`;
+        simCheckbox.name = `item-${item}`;
         simCheckbox.value = 'sim';
 
         const naoLabel = document.createElement('label');

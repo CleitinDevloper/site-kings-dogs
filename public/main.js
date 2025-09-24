@@ -21,18 +21,20 @@ async function updateItems(){
         div.innerHTML = `<h2>Produtos</h2>`
         Object.values(data.items).forEach(x => {
           storeItems[x.id] = { nome: x.nome, price: x.price, img: x.img, desc: x.desc, quantidade: x.quantidade, obs: x.obs }
-          div.innerHTML = div.innerHTML + `
-          <div class="products" id="products">
-            <div class="product">
-              <img style="max-width: 150px; height: 150px" src="${x.img}" alt="Produto ${x.id}"/>
-              <h3>${x.nome}</h3>
-              <p>${x.desc}</p>
-              <p>Preço: ${x.price}.00 R$</p>
-              <p>Quantidade em Estoque: ${x.quantidade}</p>
-              <button class="add-to-cart" data-id="${x.id}">Adicionar ao Carrinho</button>
-            </div>
-          </div>
+
+          const div = document.getElementById("produtos");
+
+          const productDiv = document.createElement("div");
+          productDiv.className = "product";
+          productDiv.innerHTML = `
+            <img style="max-width:150px;height:150px" src="${x.img}" alt="Produto ${x.id}"/>
+            <h3>${x.nome}</h3>
+            <p>${x.desc}</p>
+            <p>Preço: ${x.price}.00 R$</p>
+            <p>Quantidade em Estoque: ${x.quantidade}</p>
+            <button class="add-to-cart" data-id="${x.id}">Adicionar ao Carrinho</button>
           `;
+          div.appendChild(productDiv);
         });
       };
     } else {
@@ -295,9 +297,7 @@ document.querySelectorAll(".add-to-cart").forEach(btn => {
   btn.addEventListener("click", async () => {
     const id = btn.dataset.id;
     const result = await showObservacoesModal(id);
-    if (result) {
-      addToCart(id, JSON.stringify(result.respostas, null, 2));
-    }
+    if (result) addToCart(id, JSON.stringify(result.respostas, null, 2));
   });
 });
 

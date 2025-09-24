@@ -296,3 +296,11 @@ document.querySelectorAll('.tab-link').forEach((link) => {
       }
     });
   })();
+
+document.querySelectorAll("#login button").forEach(btn => {
+  btn.addEventListener("click", login);
+});
+
+document.querySelectorAll(".cart button").forEach(btn => {
+  btn.addEventListener("click", tryPayment);
+});

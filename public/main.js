@@ -28,7 +28,7 @@ async function updateItems(){
               <p>${x.desc}</p>
               <p>Preço: ${x.price}.00 R$</p>
               <p>Quantidade em Estoque: ${x.quantidade}</p>
-              <button item-id="${x.id}" onclick="showObservacoesModal(${x.id}, ${x.obs}).then(result => {
+              <button item-id="${x.id}" onclick="showObservacoesModal(${x.id}, [${x.obs}]).then(result => {
                 if (result) {
                   addToCart(${x.id}, JSON.stringify(result.respostas, null, 2))
                 }});">Adicionar ao Carrinho</button>

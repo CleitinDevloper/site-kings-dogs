@@ -29,10 +29,7 @@ async function updateItems(){
               <p>${x.desc}</p>
               <p>Preço: ${x.price}.00 R$</p>
               <p>Quantidade em Estoque: ${x.quantidade}</p>
-              <button item-id="${x.id}" onclick="showObservacoesModal(${x.id}).then(result => {
-                if (result) {
-                  addToCart(${x.id}, JSON.stringify(result.respostas, null, 2))
-                }});">Adicionar ao Carrinho</button>
+              <button item-id="${x.id}>Adicionar ao Carrinho</button>
             </div>
           </div>
           `;
@@ -292,4 +289,21 @@ document.querySelectorAll("#login button").forEach(btn => {
 
 document.querySelectorAll(".cart button").forEach(btn => {
   btn.addEventListener("click", tryPayment);
+});
+
+document.querySelectorAll(".add-to-cart").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    const id = btn.dataset.id;
+    const result = await showObservacoesModal(id);
+    if (result) {
+      addToCart(id, JSON.stringify(result.respostas, null, 2));
+    }
+  });
+});
+
+document.querySelectorAll(".remove-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const index = btn.dataset.index;
+    removeFromCart(index);
+  });
 });

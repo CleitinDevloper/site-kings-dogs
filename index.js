@@ -87,7 +87,12 @@ async function updateDataServer(){
     });
 
     produtos.forEach(x => {
-        console.log(x.produto_obs)
+        try {
+            obs = JSON.parse(x.produto_obs);
+        } catch (e) {
+            console.warn("Obs não era JSON válido:", x.produto_obs);
+            obs = [];
+        }
         items[x.id] = {
             id: x.id,
             img: x.img,

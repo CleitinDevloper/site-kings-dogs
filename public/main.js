@@ -1,7 +1,7 @@
 let token = "";
 
 let storeItems = [];
-let cart = {};
+let cart = [];
 let total = 0;
 
 async function updateItems(){
@@ -48,27 +48,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 })
 
 function addToCart(id, obs) {
-  console.log(obs)
-  /*const name = product.getAttribute('data-name');
-  const price = parseFloat(product.getAttribute('data-price'));
-  const existing = cart.find((item) => item.id === id);
-  if (existing) {
-    existing.quantity++;
-  } else {
-    cart.push({ id, name, price, quantity: 1 });
-  }
-  updateCart();*/
+  if (storeItems[id]) {
+    cart.push({ id: id, nome: storeItems[id].nome, obs: obs })
+  };
+
+  updateCart();
 }
 
-function removeFromCart(id) {
-  const index = cart.findIndex((item) => item.id === id);
-  if (index > -1) {
-    if (cart[index].quantity > 1) {
-      cart[index].quantity--;
-    } else {
-      cart.splice(index, 1);
-    }
-  }
+function removeFromCart(index) {
+  if (cart[index]){
+    cart.splice(index, 1)
+  };
+
   updateCart();
 }
 
@@ -76,15 +67,15 @@ function updateCart() {
   const cartItems = document.getElementById('cart-items');
   cartItems.innerHTML = '';
   total = 0;
-  cart.forEach((item) => {
+  cart.forEach((item, index)=> {
     total += item.price * item.quantity;
     cartItems.innerHTML += `
                     <div class="cart-item">
                         <img         
                         src="https://via.placeholder.com/250x150?text=Produto+3"
                         alt="Produto 3"/>
-                        <span>${item.name} (x${item.quantity}) - R$ ${(item.price * item.quantity).toFixed(2)}</span>
-                        <button onclick="removeFromCart(${item.id})">Remover</button>
+                        <span>${item.name} - R$ ${item.price}</span>
+                        <button onclick="removeFromCart(${index})">Remover</button>
                     </div>
                 `;
   });

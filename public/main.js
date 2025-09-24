@@ -3,6 +3,10 @@ let token = "";
 let storeItems = [];
 let cart = [];
 let total = 0;
+/* onclick="showObservacoesModal(${x.id}).then(result => {
+                if (result) {
+                  addToCart(${x.id}, JSON.stringify(result.respostas, null, 2))
+                }}); */
 
 async function updateItems(){
       const res = await fetch("/getItems", {
@@ -29,10 +33,7 @@ async function updateItems(){
               <p>${x.desc}</p>
               <p>Preço: ${x.price}.00 R$</p>
               <p>Quantidade em Estoque: ${x.quantidade}</p>
-              <button item-id="${x.id}" onclick="showObservacoesModal(${x.id}).then(result => {
-                if (result) {
-                  addToCart(${x.id}, JSON.stringify(result.respostas, null, 2))
-                }});">Adicionar ao Carrinho</button>
+              <button item-id="${x.id}" ">Adicionar ao Carrinho</button> 
             </div>
           </div>
           `;
@@ -73,12 +74,12 @@ function updateCart() {
                     <div class="cart-item">
                         <img style="width: 50px; height: 50px" src="${item.img}" alt="Produto 3"/>
                         <span>${item.nome} - R$ ${item.price}</span>
-                        <button onclick="removeFromCart(${index})">Remover</button>
+                        <button>Remover</button>
                     </div>
                 `;
   });
   document.getElementById('total').textContent = total.toFixed(2);
-}
+} // onclick="removeFromCart(${index})"
 
 async function tryPayment(){
   if (cart.length > 0){

@@ -28,14 +28,10 @@ async function updateItems(){
               <p>${x.desc}</p>
               <p>Preço: ${x.price}.00 R$</p>
               <p>Quantidade em Estoque: ${x.quantidade}</p>
-              <button item-id="${x.id}" onclick="showObservacoesModal(${x.id}, ['Purê de batatas', 'Ketchup', 'Mostarda']).then(result => {
+              <button item-id="${x.id}" onclick="showObservacoesModal(${x.id}, ${x.obs}).then(result => {
                 if (result) {
-                  alert('ID: ' + result.id + ' Respostas: ' + JSON.stringify(result.respostas, null, 2));
-                  console.log(result);
-                } else {
-                  alert('Modal fechado sem enviar.');
-                }
-              });">Adicionar ao Carrinho</button>
+                  addToCart(${x.id}, JSON.stringify(result.respostas, null, 2))
+                }});">Adicionar ao Carrinho</button>
             </div>
           </div>
           `;
@@ -50,8 +46,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   await updateItems();
 })
 
-function addToCart(id) {
-  console.log(id.getAttribute("item-id"))
+function addToCart(id, obs) {
+  console.log(obs)
   /*const name = product.getAttribute('data-name');
   const price = parseFloat(product.getAttribute('data-price'));
   const existing = cart.find((item) => item.id === id);
@@ -93,6 +89,18 @@ function updateCart() {
   });
   document.getElementById('total').textContent = total.toFixed(2);
 }
+
+async function tryPayment(){
+  if (cart.length > 0){
+    const res = await fetch("/generate-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ cart })
+    })
+  };
+};
 
 async function login() {
   const username = document.getElementById('username').value;

@@ -26,7 +26,15 @@ const tablesToCreate = [
         produto_name VARCHAR(255) NOT NULL,
         produto_desc VARCHAR(255) NOT NULL,
         produto_price INT NOT NULL,
+        produto_obs JSON,
         quantidade INT NOT NULL
+    );`,
+    `CREATE TABLE IF NOT EXISTS pedidos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        status VARCHAR(255) NOT NULL,
+        nome_cliente VARCHAR(255) NOT NULL,
+        email_cliente VARCHAR(255) NOT NULL,
+        pedido JSON NOT NULL
     );`
 ];
 
@@ -58,11 +66,13 @@ async function createTables(tables) {
 let userList = {};
 let tokensList = {};
 let items = {};
+let pedidos = {};
 
 async function updateDataServer(){
   try {
-    const [produtos] = await connection.query(`SELECT * FROM produtos`);
     const [funcionarios] = await connection.query(`SELECT * FROM funcionarios`);
+    const [produtos] = await connection.query(`SELECT * FROM produtos`);
+    const [pedidos] = await connection.query(`SELECT * FROM pedidos`);
     funcionarios.forEach(x => {
         userList[x.usuario] = {
             password: x.senha,
@@ -83,7 +93,18 @@ async function updateDataServer(){
             nome: x.produto_name,
             desc: x.produto_desc,
             price: x.produto_price,
+            obs: x.produto_obs,
             quantidade: x.quantidade
+        };
+    });
+
+    pedidos.forEach(x => {
+        pedidos[x.id] = {
+            id: x.id,
+            status: x.status,
+            nome_cliente: x.nome_cliente,
+            email_cliente: x.email_cliente,
+            pedido: x.pedido
         };
     });
   } catch (err) {
@@ -108,7 +129,13 @@ app.post("/getItems" , (req, res) => {
         return res.json({ status: "success", items: items, message: "Lista de Items." })
     }else {
         return res.json({ status: "fail", message: "Nenhum item encontrado." })
-    }  
+    };
+});
+
+app.post("/generate-payment", async (req, res) => {
+    const { cart } = req.body;
+
+    console.log(cart)
 })
 
 app.post("/login", (req, res) => {

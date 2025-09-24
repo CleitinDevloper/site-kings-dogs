@@ -20,6 +20,7 @@ async function updateItems(){
       if (data.items){
         div.innerHTML = `<h2>Produtos</h2>`
         Object.values(data.items).forEach(x => {
+          storeItems[x.id] = { nome: x.nome, obs: x.obs }
           div.innerHTML = div.innerHTML + `
           <div class="products" id="products">
             <div class="product">
@@ -28,7 +29,7 @@ async function updateItems(){
               <p>${x.desc}</p>
               <p>Preço: ${x.price}.00 R$</p>
               <p>Quantidade em Estoque: ${x.quantidade}</p>
-              <button item-id="${x.id}" onclick="showObservacoesModal(${x.id}, [${x.obs}]).then(result => {
+              <button item-id="${x.id}" onclick="showObservacoesModal(${x.id}).then(result => {
                 if (result) {
                   addToCart(${x.id}, JSON.stringify(result.respostas, null, 2))
                 }});">Adicionar ao Carrinho</button>
@@ -240,17 +241,21 @@ document.querySelectorAll('.tab-link').forEach((link) => {
       });
     }
 
-    window.showObservacoesModal = function(id, items) {
-      return new Promise((resolve) => {
-        currentResolve = resolve;
-        currentId = id;
+    window.showObservacoesModal = function(id) {
+      if (storeItems[id] && storeItems[id].obs.length > 0){
+        return new Promise((resolve) => {
+          currentResolve = resolve;
+          currentId = id;
 
-        clearModal();
-        buildFields(items);
+          clearModal();
+          buildFields(storeItems[id]);
 
-        modal.classList.add('show');
-        overlay.classList.add('show');
-      });
+          modal.classList.add('show');
+          overlay.classList.add('show');
+        });
+      } else{
+        return;
+      }
     };
 
     btnEnviar.addEventListener('click', () => {

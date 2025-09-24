@@ -71,9 +71,7 @@ function updateCart() {
     total += item.price;
     cartItems.innerHTML += `
                     <div class="cart-item">
-                        <img         
-                        src="${item.img}"
-                        alt="Produto 3"/>
+                        <img style="width: 50px; height: 50px" src="${item.img}" alt="Produto 3"/>
                         <span>${item.nome} - R$ ${item.price}</span>
                         <button onclick="removeFromCart(${index})">Remover</button>
                     </div>

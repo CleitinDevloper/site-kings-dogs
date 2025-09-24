@@ -87,6 +87,7 @@ async function updateDataServer(){
     });
 
     produtos.forEach(x => {
+        console.log(x.produto_obs)
         items[x.id] = {
             id: x.id,
             img: x.img,

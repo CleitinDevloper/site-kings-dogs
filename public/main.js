@@ -3,10 +3,7 @@ let token = "";
 let storeItems = [];
 let cart = [];
 let total = 0;
-/* onclick="showObservacoesModal(${x.id}).then(result => {
-                if (result) {
-                  addToCart(${x.id}, JSON.stringify(result.respostas, null, 2))
-                }}); */
+/* onclick="; */
 
 async function updateItems(){
       const res = await fetch("/getItems", {
@@ -33,7 +30,7 @@ async function updateItems(){
               <p>${x.desc}</p>
               <p>Preço: ${x.price}.00 R$</p>
               <p>Quantidade em Estoque: ${x.quantidade}</p>
-              <button item-id="${x.id}" ">Adicionar ao Carrinho</button> 
+              <button item-id="${x.id}" id="botao-add"}>Adicionar ao Carrinho</button> 
             </div>
           </div>
           `;
@@ -74,7 +71,7 @@ function updateCart() {
                     <div class="cart-item">
                         <img style="width: 50px; height: 50px" src="${item.img}" alt="Produto 3"/>
                         <span>${item.nome} - R$ ${item.price}</span>
-                        <button>Remover</button>
+                        <button item-id="${index}">Remover</button>
                     </div>
                 `;
   });
@@ -293,4 +290,27 @@ document.querySelectorAll("#login button").forEach(btn => {
 
 document.querySelectorAll(".cart button").forEach(btn => {
   btn.addEventListener("click", tryPayment);
+});
+
+const cartContainer = document.getElementById('cart-items');
+
+cartContainer.addEventListener('click', (event) => {
+  if (event.target.tagName === 'BUTTON' && event.target.closest('.cart-item')) {
+    const itemId = event.target.getAttribute('item-id');
+    if (itemId) {
+      removeFromCart(itemId);
+    };
+  };
+});
+
+const produtosContainer = document.getElementById('produtos');
+
+produtosContainer.addEventListener('click', async (event) => {
+  if (event.target.tagName === 'BUTTON' && event.target.hasAttribute('item-id')) {
+    const itemId = event.target.getAttribute('item-id');
+    await showObservacoesModal(itemId).then(result => {
+    if (result) {
+        addToCart(itemId, JSON.stringify(result.respostas, null, 2))
+    }});
+  };
 });

@@ -20,7 +20,7 @@ async function updateItems(){
       if (data.items){
         div.innerHTML = `<h2>Produtos</h2>`
         Object.values(data.items).forEach(x => {
-          storeItems[x.id] = { nome: x.nome, obs: x.obs }
+          storeItems[x.id] = { nome: x.nome, price: x.price, obs: x.obs }
           div.innerHTML = div.innerHTML + `
           <div class="products" id="products">
             <div class="product">
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function addToCart(id, obs) {
   if (storeItems[id]) {
-    cart.push({ id: id, nome: storeItems[id].nome, obs: obs })
+    cart.push({ id: id, nome: storeItems[id].nome, price: storeItems[id].price, obs: obs })
   };
 
   updateCart();
@@ -68,13 +68,13 @@ function updateCart() {
   cartItems.innerHTML = '';
   total = 0;
   cart.forEach((item, index)=> {
-    total += item.price * item.quantity;
+    total += item.price;
     cartItems.innerHTML += `
                     <div class="cart-item">
                         <img         
                         src="https://via.placeholder.com/250x150?text=Produto+3"
                         alt="Produto 3"/>
-                        <span>${item.name} - R$ ${item.price}</span>
+                        <span>${item.nome} - R$ ${item.price}</span>
                         <button onclick="removeFromCart(${index})">Remover</button>
                     </div>
                 `;

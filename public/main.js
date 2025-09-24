@@ -188,7 +188,7 @@ document.querySelectorAll('.tab-link').forEach((link) => {
     }
 
     function buildFields(items) {
-      items.forEach((item, index) => {
+      Object.values(items).forEach((item, index) => {
         const row = document.createElement('div');
         row.className = 'item-row';
 

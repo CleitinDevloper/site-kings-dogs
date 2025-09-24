@@ -94,7 +94,7 @@ async function updateDataServer(){
             newObs.push(y)
         })
 
-        console.log(newObs)
+        console.log(JSON.parse(newObs))
 
         items[x.id] = {
             id: x.id,

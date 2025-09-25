@@ -168,13 +168,13 @@ app.post("/generate-payment", async (req, res) => {
 
     const body = {
         transaction_amount: total,
-        description,
+        description: "Pagamento kings dog - Colegio Alicerce.",
         payment_method_id: "pix",
         payer: {
             email: email
         },
         external_reference: `${product_id}`,
-        notification_url: `https://kingsdog.discloud.app/webhook?payment_id=${product_id}`
+        //notification_url: `https://kingsdog.discloud.app/webhook?payment_id=${product_id}`
     };
 
     const payment = await fetch("https://api.mercadopago.com/v1/payments", {

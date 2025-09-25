@@ -428,3 +428,7 @@ produtosContainer.addEventListener('click', async (event) => {
     }});
   };
 });
+
+document.getElementById("fechar-comprovante").addEventListener('click', (event) => {
+  document.getElementById("payCard").style.display = 'none';
+})

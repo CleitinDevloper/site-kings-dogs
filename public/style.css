@@ -286,8 +286,10 @@
       pointer-events: none; /* deixa o resto da página interativo quando quiser */
     }
     .card {
+      align-items: center;
+      justify-content: center;
       display: none;
-      position: absolute;
+      position: fixed;
       pointer-events: auto; /* aqui sim pega clique */
       background: #ffffff;
       border-radius: 10px;

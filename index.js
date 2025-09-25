@@ -3,6 +3,8 @@ const express = require("express");
 const path = require("path");
 const mysql = require("mysql2");
 const app = express();
+const axios = require('axios');
+const { v4: uuidv4 } = require('uuid');
 const port = 8080;
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -165,44 +167,35 @@ app.post("/generate-payment", async (req, res) => {
     }
 
     const product_id = await generateToken(10);
+    const idempotencyKey = uuidv4();
 
-    const body = {
-        transaction_amount: total,
-        description: "Pagamento kings dog - Colegio Alicerce.",
+    const payment = {
+        transaction_amount: parseFloat(total),
+        description: `Pedido Kings Dog`,
         payment_method_id: "pix",
         payer: {
-            email: email
+            email: email,
         },
-        external_reference: `${product_id}`,
-        //notification_url: `https://kingsdog.discloud.app/webhook?payment_id=${product_id}`
     };
 
-    const payment = await fetch("https://api.mercadopago.com/v1/payments", {
-        method: "POST",
-        headers: {
-        "Authorization": `Bearer ${process.env.MP_TOKEN}`,
-        "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-    });
+    const headers = {
+        'Authorization': `Bearer ${process.env.MP_TOKEN}`,
+        'Content-Type': 'application/json',
+        'x-idempotency-key': idempotencyKey
+    };
 
-    if (!payment.ok) {
-        const errJson = await payment.json();
-        console.log(errJson);
-        return res.json({ status: "fail", message: "Erro ao gerar pagamento tente novamente mais tarde." });
+    try{
+        const response = await axios.post('https://api.mercadopago.com/v1/payments', payment, { headers });
+
+        const data = response.data;
+
+        const qrCodeBase64 = data.point_of_interaction?.transaction_data?.qr_code_base64;
+        const qrCodeText = data.point_of_interaction?.transaction_data?.qr_code;
+
+        return res.json({ status: "success", message: "Usuário não encontrado.", qr_code: qrCodeText, qr_code_base64: qrCodeBase64 });
+    } catch(e){
+        console.log("Erro: "+e)
     }
-
-    const MPjson = await payment.json();
-
-    const poi = MPjson.point_of_interaction || {};
-    const txData = poi.transaction_data || {};
-
-    return res.json({
-      payment_id: MPjson.id,
-      status: "success",
-      qr_code: txData.qr_code,
-      qr_code_base64: txData.qr_code_base64
-    });
 });
 
 app.post("/login", (req, res) => {

@@ -147,7 +147,7 @@ app.post("/generate-payment", async (req, res) => {
     cart.forEach(x => {
         if (items[x.id]){
             if (items[x.id].quantidade > 0){
-                console.log(JSON.parse(cart.obs))
+                console.log("JSON: "+JSON.parse(x.obs))
             } else{
                return res.json({ status: "fail", message: "Item em falta no estoque." }); 
             }

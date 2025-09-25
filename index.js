@@ -148,16 +148,17 @@ app.post("/getItems" , (req, res) => {
 app.post("/generate-payment", async (req, res) => {
     const { cart, nome, email } = req.body;
 
+
+    if (nome == "" && !email.includes("@") && !email.includes(".")){
+        return res.json({ status: "fail", message: "Informações faltando preencha novamente." }); 
+    }
+
     var total = 0;
 
     for (const x of cart){
         if (items[x.id]){
             if (items[x.id].quantidade > 0){
-                if (nome != "" && email.includes("@") && email.includes(".")){
-                    total += items[x.id].price;
-                } else{
-                    return res.json({ status: "fail", message: "Informações faltando preencha novamente." }); 
-                }
+                total += items[x.id].price;
             } else{
                return res.json({ status: "fail", message: "Item em falta no estoque." }); 
             }
@@ -176,6 +177,7 @@ app.post("/generate-payment", async (req, res) => {
         payer: {
             email: email,
         },
+        external_reference: product_id
     };
 
     const headers = {
@@ -192,9 +194,14 @@ app.post("/generate-payment", async (req, res) => {
         const qrCodeBase64 = data.point_of_interaction?.transaction_data?.qr_code_base64;
         const qrCodeText = data.point_of_interaction?.transaction_data?.qr_code;
 
-        return res.json({ status: "success", message: "Usuário não encontrado.", qr_code: qrCodeText, qr_code_base64: qrCodeBase64 });
+        return res.json({ status: "success", message: "Pagamento gerado com sucesso!", qr_code: qrCodeText, qr_code_base64: qrCodeBase64 });
     } catch(e){
-        console.log("Erro: "+e)
+        console.error("Erro Mercado Pago:", e.response?.data || e.message);
+        return res.status(500).json({
+            status: "fail",
+            message: "Erro ao gerar pagamento",
+            details: e.response?.data || e.message
+        });
     }
 });
 

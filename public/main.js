@@ -145,7 +145,7 @@ async function tryPayment(){
     });
 
     if (nome != "" && email != ""){
-      const res = await fetch("/create-payment", {
+      const res = await fetch("/generate-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cart, nome, email })

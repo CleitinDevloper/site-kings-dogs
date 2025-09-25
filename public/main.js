@@ -44,12 +44,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   await updateItems();
 })
 
-function addToCart(id, obs) {
+async function addToCart(id, obs) {
   if (storeItems[id]) {
     if (storeItems[id].quantidade > 0){
       cart.push({ id: id, nome: storeItems[id].nome, price: storeItems[id].price, img: storeItems[id].img, obs: obs })
     } else {
-      Swal.fire({
+      await Swal.fire({
         title: "Produto em falta no estoque.",
         icon: "error",
         draggable: true
@@ -90,7 +90,7 @@ async function tryPayment(){
     var nome = "";
     var email = "";
 
-    Swal.fire({
+    await Swal.fire({
     title: "Coloque um nome que deseja ser chamado quando o pedido estiver pronto:",
     input: "text",
     inputAttributes: {
@@ -113,7 +113,7 @@ async function tryPayment(){
       }
     });
 
-    Swal.fire({
+    await Swal.fire({
     title: "Para sua Segurança Insira um e-mail para podermos finalizar seu pedido.",
     input: "text",
     inputAttributes: {
@@ -127,7 +127,7 @@ async function tryPayment(){
         if (login.includes("@") && login.includes(".")){
           email = login
         }else{
-          Swal.fire({
+          await Swal.fire({
             title: "E-mail invalido (exemplo@xyz.com)",
             icon: "error",
             draggable: true
@@ -144,14 +144,21 @@ async function tryPayment(){
       }
     });
 
-  
-    const res = await fetch("/generate-payment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ cart, nome, email })
-    })
+    if (nome != "" && email != ""){
+      const res = await fetch("/generate-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ cart, nome, email })
+      })
+    } else{
+        await Swal.fire({
+          title: "Informações invalidas, tente fazer o pagamento novamente.",
+          icon: "error",
+          draggable: true
+        });
+    };
   };
 };
 
@@ -373,9 +380,9 @@ const produtosContainer = document.getElementById('produtos');
 produtosContainer.addEventListener('click', async (event) => {
   if (event.target.tagName === 'BUTTON' && event.target.hasAttribute('item-id')) {
     const itemId = event.target.getAttribute('item-id');
-    await showObservacoesModal(itemId).then(result => {
+    await showObservacoesModal(itemId).then(async result => {
     if (result) {
-        addToCart(itemId, JSON.stringify(result.respostas, null, 2))
+        await addToCart(itemId, JSON.stringify(result.respostas, null, 2));
     }});
   };
 });

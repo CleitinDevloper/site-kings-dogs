@@ -147,7 +147,18 @@ app.post("/generate-payment", async (req, res) => {
     cart.forEach(x => {
         if (items[x.id]){
             if (items[x.id].quantidade > 0){
-                console.log("JSON: "+JSON.parse(x.obs))
+                if (nome != "" && email.includes("@") && email.includes(".")){
+                    const body = {
+                        transaction_amount: Number(amount),
+                        description,
+                        payment_method_id: "pix",
+                        payer,
+                        external_reference: `order_${Date.now()}`,
+                        notification_url: "https://kingsdog.discloud.app/webhook"
+                    };
+                } else{
+                    return res.json({ status: "fail", message: "Informações faltando preencha novamente." }); 
+                }
             } else{
                return res.json({ status: "fail", message: "Item em falta no estoque." }); 
             }

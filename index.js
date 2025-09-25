@@ -4,7 +4,7 @@ const path = require("path");
 const mysql = require("mysql2");
 const app = express();
 const axios = require('axios');
-import { v4 as uuidv4 } from 'uuid';
+const crypto = require("crypto");
 const port = 8080;
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -167,7 +167,7 @@ app.post("/generate-payment", async (req, res) => {
     }
 
     const product_id = await generateToken(10);
-    const idempotencyKey = uuidv4();
+    const idempotencyKey = crypto.randomUUID();
 
     const payment = {
         transaction_amount: parseFloat(total),

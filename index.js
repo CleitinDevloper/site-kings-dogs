@@ -4,7 +4,7 @@ const path = require("path");
 const mysql = require("mysql2");
 const app = express();
 const axios = require('axios');
-const { v4: uuidv4 } = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
 const port = 8080;
 
 app.use(express.static(path.join(__dirname, "public")));

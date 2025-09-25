@@ -177,7 +177,8 @@ app.post("/generate-payment", async (req, res) => {
         payer: {
             email: email,
         },
-        external_reference: product_id
+        external_reference: product_id,
+        installments: 1
     };
 
     const headers = {

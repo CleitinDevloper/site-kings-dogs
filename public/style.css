@@ -283,20 +283,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      pointer-events: none; /* deixa o resto da página interativo quando quiser */
+      pointer-events: none;
     }
     .card {
       align-items: center;
       justify-content: center;
       display: none;
       position: fixed;
-      pointer-events: auto; /* aqui sim pega clique */
+      pointer-events: auto;
       background: #ffffff;
       border-radius: 10px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.12);
       padding: 20px;
-      width: 320px;
-      max-width: calc(100% - 40px);
+      width: 60%;
+      height: 500px;
       text-align: center;
       font-family: Arial, sans-serif;
     }

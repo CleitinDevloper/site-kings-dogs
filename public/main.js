@@ -3,7 +3,6 @@ let token = "";
 let storeItems = [];
 let cart = [];
 let total = 0;
-/* onclick="; */
 
 async function updateItems(){
       const res = await fetch("/getItems", {
@@ -28,9 +27,9 @@ async function updateItems(){
               <img style="max-width: 150px; height: 150px" src="${x.img}" alt="Produto ${x.id}"/>
               <h3>${x.nome}</h3>
               <p>${x.desc}</p>
-              <p>Preço: ${x.price}.00 R$</p>
+              <p>Preço: ${x.price} R$</p>
               <p>Quantidade em Estoque: ${x.quantidade}</p>
-              <button item-id="${x.id}" id="botao-add"}>Adicionar ao Carrinho</button> 
+              <button item-id="${x.id}">Adicionar ao Carrinho</button> 
             </div>
           </div>
           `;
@@ -76,7 +75,7 @@ function updateCart() {
                 `;
   });
   document.getElementById('total').textContent = total.toFixed(2);
-} // onclick="removeFromCart(${index})"
+}
 
 async function tryPayment(){
   if (cart.length > 0){

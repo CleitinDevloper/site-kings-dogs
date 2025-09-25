@@ -31,6 +31,8 @@ const tablesToCreate = [
     );`,
     `CREATE TABLE IF NOT EXISTS pedidos (
         id INT AUTO_INCREMENT PRIMARY KEY,
+        codigo_mp VARCHAR(255) NOT NULL,
+        codigo_token VARCHAR(255) NOT NULL,
         status VARCHAR(255) NOT NULL,
         nome_cliente VARCHAR(255) NOT NULL,
         email_cliente VARCHAR(255) NOT NULL,
@@ -144,18 +146,13 @@ app.post("/getItems" , (req, res) => {
 app.post("/generate-payment", async (req, res) => {
     const { cart, nome, email } = req.body;
 
-    cart.forEach(x => {
+    var total = 0;
+
+    for (const x of cart){
         if (items[x.id]){
             if (items[x.id].quantidade > 0){
                 if (nome != "" && email.includes("@") && email.includes(".")){
-                    const body = {
-                        transaction_amount: Number(amount),
-                        description,
-                        payment_method_id: "pix",
-                        payer,
-                        external_reference: `order_${Date.now()}`,
-                        notification_url: "https://kingsdog.discloud.app/webhook"
-                    };
+                    total += items[x.id].price;
                 } else{
                     return res.json({ status: "fail", message: "Informações faltando preencha novamente." }); 
                 }
@@ -165,6 +162,44 @@ app.post("/generate-payment", async (req, res) => {
         } else{
             return res.json({ status: "fail", message: "Item não cadastrado no banco de dados." });
         }
+    }
+
+    const product_id = await generateToken(10);
+
+    const body = {
+        transaction_amount: total,
+        description,
+        payment_method_id: "pix",
+        payer: {
+            email: email
+        },
+        external_reference: `${product_id}`,
+        notification_url: `https://kingsdog.discloud.app/webhook?payment_id=${product_id}`
+    };
+
+    const payment = await fetch("https://api.mercadopago.com/v1/payments", {
+        method: "POST",
+        headers: {
+        "Authorization": `Bearer ${process.env.MP_TOKEN}`,
+        "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    });
+
+    const MPjson = await payment.json();
+
+    if (!MPjson.ok) {
+      return res.json({ status: "fail", message: "Erro ao gerar pagamento tente novamente mais tarde." });
+    }
+
+    const poi = MPjson.point_of_interaction || {};
+    const txData = poi.transaction_data || {};
+
+    return res.json({
+      payment_id: MPjson.id,
+      status: "success",
+      qr_code: txData.qr_code,
+      qr_code_base64: txData.qr_code_base64
     });
 });
 

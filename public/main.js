@@ -152,6 +152,40 @@ async function tryPayment(){
         },
         body: JSON.stringify({ cart, nome, email })
       })
+
+      const data = await res.json()
+
+      if (data.status == "success") {
+        const div = document.getElementById("payCard")
+
+        div.style.display = "flex";
+
+        const short = data.short_qr_display || "";
+        const fullQr = data.qr_code || "";
+        const base64 = data.qr_code_base64 || "";
+
+        if (base64) {
+          document.getElementById("qrImg").src = `data:image/png;base64,${base64}`;
+        } else {
+          document.getElementById("qrImg").alt = "QR não disponível";
+        }
+
+        const copiaEl = document.getElementById("copia");
+        copiaEl.innerText = short || (fullQr.slice(0,20) + "...");
+        copiaEl.dataset.full = fullQr;
+
+        const copyBtn = document.getElementById("copyBtn");
+        copyBtn.onclick = () => copyFull(copiaEl.dataset.full);
+
+        copiaEl.onclick = () => copyFull(copiaEl.dataset.full);
+
+      } else{
+          await Swal.fire({
+            title: data.message,
+            icon: "error",
+            draggable: true
+          });
+      };
     } else{
         await Swal.fire({
           title: "Informações invalidas, tente fazer o pagamento novamente.",
@@ -161,6 +195,16 @@ async function tryPayment(){
     };
   };
 };
+
+function copyFull(text) {
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Cópia realizada!");
+  }, (err) => {
+    console.error("Erro ao copiar", err);
+    alert("Não foi possível copiar automaticamente. Selecione e copie manualmente.");
+  });
+}
 
 async function login() {
   const username = document.getElementById('username').value;

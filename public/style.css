@@ -277,6 +277,63 @@
       flex: 1;
     }
 
+    .overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none; /* deixa o resto da página interativo quando quiser */
+    }
+    .card {
+      display: none;
+      pointer-events: auto; /* aqui sim pega clique */
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      padding: 20px;
+      width: 320px;
+      max-width: calc(100% - 40px);
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    .qr-img {
+      width: 220px;
+      height: 220px;
+      object-fit: contain;
+      margin: 12px auto;
+    }
+    .copy-row {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-top:8px;
+    }
+    .copia {
+      flex:1;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      font-family: monospace;
+      font-size: 13px;
+      background:#f4f4f4;
+      padding:8px;
+      border-radius:6px;
+      cursor:pointer;
+    }
+    .btn {
+      margin-left:8px;
+      padding:8px 12px;
+      border-radius:6px;
+      border:none;
+      cursor:pointer;
+    }
+    .small {
+      font-size:12px;
+      color:#666;
+    }
+
     @media (max-width: 768px) {
         nav ul {
           flex-direction: column;

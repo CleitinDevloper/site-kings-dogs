@@ -142,10 +142,20 @@ app.post("/getItems" , (req, res) => {
 });
 
 app.post("/generate-payment", async (req, res) => {
-    const { cart } = req.body;
+    const { cart, nome, email } = req.body;
 
-    console.log(cart)
-})
+    cart.forEach(x => {
+        if (items[x.id]){
+            if (items[x.id].quantidade > 0){
+                console.log(JSON.parse(cart.obs))
+            } else{
+               return res.json({ status: "fail", message: "Item em falta no estoque." }); 
+            }
+        } else{
+            return res.json({ status: "fail", message: "Item não cadastrado no banco de dados." });
+        }
+    });
+});
 
 app.post("/login", (req, res) => {
     const { username, password } = req.body;

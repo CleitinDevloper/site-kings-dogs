@@ -46,7 +46,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 function addToCart(id, obs) {
   if (storeItems[id]) {
-    cart.push({ id: id, nome: storeItems[id].nome, price: storeItems[id].price, img: storeItems[id].img, obs: obs })
+    if (storeItems[id].quantidade > 0){
+      cart.push({ id: id, nome: storeItems[id].nome, price: storeItems[id].price, img: storeItems[id].img, obs: obs })
+    } else {
+      Swal.fire({
+        title: "Produto em falta no estoque.",
+        icon: "error",
+        draggable: true
+      });
+    }
   };
 
   updateCart();
@@ -79,12 +87,70 @@ function updateCart() {
 
 async function tryPayment(){
   if (cart.length > 0){
+    var nome = "";
+    var email = "";
+
+    Swal.fire({
+    title: "Coloque um nome que deseja ser chamado quando o pedido estiver pronto:",
+    input: "text",
+    inputAttributes: {
+      autocapitalize: "off"
+    },
+    showCancelButton: false,
+    confirmButtonText: "Avançar",
+    showLoaderOnConfirm: true,
+    preConfirm: async (login) => {
+      try {
+        nome = login
+      } catch (error) {
+        console.log(error);
+        return;
+      }
+    },
+    }).then((result) => {
+      if (!result.isConfirmed) {
+        return;
+      }
+    });
+
+    Swal.fire({
+    title: "Para sua Segurança Insira um e-mail para podermos finalizar seu pedido.",
+    input: "text",
+    inputAttributes: {
+      autocapitalize: "off"
+    },
+    showCancelButton: false,
+    confirmButtonText: "Finalizar",
+    showLoaderOnConfirm: true,
+    preConfirm: async (login) => {
+      try {
+        if (login.includes("@") && login.includes(".")){
+          email = login
+        }else{
+          Swal.fire({
+            title: "E-mail invalido (exemplo@xyz.com)",
+            icon: "error",
+            draggable: true
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        return;
+      }
+    },
+    }).then((result) => {
+      if (!result.isConfirmed) {
+        return;
+      }
+    });
+
+  
     const res = await fetch("/generate-payment", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ cart })
+      body: JSON.stringify({ cart, nome, email })
     })
   };
 };

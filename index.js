@@ -186,11 +186,13 @@ app.post("/generate-payment", async (req, res) => {
         body: JSON.stringify(body)
     });
 
-    const MPjson = await payment.json();
-
-    if (!MPjson.ok) {
-      return res.json({ status: "fail", message: "Erro ao gerar pagamento tente novamente mais tarde." });
+    if (!payment.ok) {
+        const errJson = await payment.json();
+        console.log(errJson);
+        return res.json({ status: "fail", message: "Erro ao gerar pagamento tente novamente mais tarde." });
     }
+
+    const MPjson = await payment.json();
 
     const poi = MPjson.point_of_interaction || {};
     const txData = poi.transaction_data || {};

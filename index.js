@@ -112,8 +112,10 @@ async function updateDataServer(){
     });
 
     pedidos.forEach(x => {
-        pedidos[x.id] = {
+        pedidos[x.codigo_token] = {
             id: x.id,
+            codigo_mp: x.codigo_mp,
+            token: x.codigo_token,
             status: x.status,
             nome_cliente: x.nome_cliente,
             email_cliente: x.email_cliente,
@@ -148,7 +150,6 @@ app.post("/getItems" , (req, res) => {
 app.post("/generate-payment", async (req, res) => {
     const { cart, nome, email } = req.body;
 
-
     if (nome == "" && !email.includes("@") && !email.includes(".")){
         return res.json({ status: "fail", message: "Informações faltando preencha novamente." }); 
     }
@@ -167,7 +168,7 @@ app.post("/generate-payment", async (req, res) => {
         }
     }
 
-    const product_id = await generateToken(10);
+    const product_id = await generateToken(15);
     const idempotencyKey = crypto.randomUUID();
 
     const payment = {
@@ -194,6 +195,8 @@ app.post("/generate-payment", async (req, res) => {
 
         const qrCodeBase64 = data.point_of_interaction?.transaction_data?.qr_code_base64;
         const qrCodeText = data.point_of_interaction?.transaction_data?.qr_code;
+
+
 
         return res.json({ status: "success", message: "Pagamento gerado com sucesso!", qr_code: qrCodeText, qr_code_base64: qrCodeBase64 });
     } catch(e){

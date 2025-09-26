@@ -57,18 +57,18 @@ async function addToCart(id, obs) {
     }
   };
 
-  updateCart();
+  await updateCart();
 }
 
-function removeFromCart(index) {
+async function removeFromCart(index) {
   if (cart[index]){
     cart.splice(index, 1)
   };
 
-  updateCart();
+  await updateCart();
 }
 
-function updateCart() {
+async function updateCart() {
   const cartItems = document.getElementById('cart-items');
   cartItems.innerHTML = '';
   total = 0;
@@ -408,11 +408,11 @@ document.querySelectorAll(".cart button").forEach(btn => {
 
 const cartContainer = document.getElementById('cart-items');
 
-cartContainer.addEventListener('click', (event) => {
+cartContainer.addEventListener('click', async (event) => {
   if (event.target.tagName === 'BUTTON' && event.target.closest('.cart-item')) {
     const itemId = event.target.getAttribute('item-id');
     if (itemId) {
-      removeFromCart(itemId);
+      await removeFromCart(itemId);
     };
   };
 });

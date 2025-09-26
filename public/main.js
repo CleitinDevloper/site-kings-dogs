@@ -158,6 +158,10 @@ async function tryPayment(){
 
         div.style.display = "flex";
 
+        if (data.codigo_pedido){
+          document.getElementById("pedido-id").innerText = `Código do seu PEDIDO: ${data.codigo_pedido}`
+        }
+
         const short = data.short_qr_display || "";
         const fullQr = data.qr_code || "";
         const base64 = data.qr_code_base64 || "";

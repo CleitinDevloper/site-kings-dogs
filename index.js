@@ -168,7 +168,13 @@ app.post("/generate-payment", async (req, res) => {
         }
     }
 
-    const product_id = await generateToken(15);
+
+    var pedido_id = await generateToken(15);
+
+    while (pedidos[pedido_id]){
+        pedido_id = await generateToken(15);
+    }
+
     const idempotencyKey = crypto.randomUUID();
 
     const payment = {
@@ -178,7 +184,7 @@ app.post("/generate-payment", async (req, res) => {
         payer: {
             email: email,
         },
-        external_reference: product_id,
+        external_reference: pedido_id,
         installments: 1
     };
 
@@ -193,12 +199,40 @@ app.post("/generate-payment", async (req, res) => {
 
         const data = response.data;
 
+        var codigoPedido
+        const mp_id = ""+data.id+"";
+        const status = data.status;
+
         const qrCodeBase64 = data.point_of_interaction?.transaction_data?.qr_code_base64;
         const qrCodeText = data.point_of_interaction?.transaction_data?.qr_code;
 
+        connection.query(`INSERT INTO pedidos (codigo_mp, codigo_token, status, nome_cliente, email_cliente, pedido)
+        VALUES (${mp_id}, ${pedido_id}, ${status}, ${nome}, ${email}, ${cart})`,
+            (err, results) => {
+                if (err){
+                    console.log("Erro: "+ err)
+                    return res.status(500).json({
+                        status: "fail",
+                        message: "Erro ao gerar pagamento",
+                        details: e.response?.data || e.message
+                    });
+                };
 
+                codigoPedido = results.insertId;
+            }
+        );
 
-        return res.json({ status: "success", message: "Pagamento gerado com sucesso!", qr_code: qrCodeText, qr_code_base64: qrCodeBase64 });
+        pedidos[pedido_id] = {
+            id: codigoPedido,
+            codigo_mp: mp_id,
+            token: pedido_id,
+            status: status,
+            nome_cliente: nome,
+            email_cliente: email,
+            pedido: cart
+        };
+
+        return res.json({ status: "success", message: "Pagamento gerado com sucesso!", codigo_pedido: codigoPedido, pedido_token: pedido_id, qr_code: qrCodeText, qr_code_base64: qrCodeBase64 });
     } catch(e){
         console.error("Erro Mercado Pago:", e.response?.data || e.message);
         return res.status(500).json({

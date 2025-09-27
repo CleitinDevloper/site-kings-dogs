@@ -426,13 +426,22 @@ const produtosContainer = document.getElementById('produtos');
 produtosContainer.addEventListener('click', async (event) => {
   if (event.target.tagName === 'BUTTON' && event.target.hasAttribute('item-id')) {
     const itemId = event.target.getAttribute('item-id');
-    if (storeItems[itemId] && storeItems[itemId].obs.length > 0){
+    if (storeItems[itemId]){
+      if( storeItems[itemId].obs.length > 0){
       await showObservacoesModal(itemId).then(async result => {
-      if (result) {
-          await addToCart(itemId, JSON.stringify(result.respostas, null, 2));
-      }});
-    } else{
-      await addToCart(itemId, []);
+        if (result) {
+            await addToCart(itemId, JSON.stringify(result.respostas, null, 2));
+        }});
+      } else{
+        await addToCart(itemId, []);
+      }
+
+      await Swal.fire({
+        title: "Seu item foi registrado com sucesso!",
+        icon: "success",
+        draggable: true
+      });
+      
     }
   };
 });

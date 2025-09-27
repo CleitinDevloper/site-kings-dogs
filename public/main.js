@@ -425,8 +425,8 @@ const produtosContainer = document.getElementById('produtos');
 
 produtosContainer.addEventListener('click', async (event) => {
   if (event.target.tagName === 'BUTTON' && event.target.hasAttribute('item-id')) {
-    if (storeItems[id] && storeItems[id].obs.length > 0){
-      const itemId = event.target.getAttribute('item-id');
+    const itemId = event.target.getAttribute('item-id');
+    if (storeItems[itemId] && storeItems[itemId].obs.length > 0){
       await showObservacoesModal(itemId).then(async result => {
       if (result) {
           await addToCart(itemId, JSON.stringify(result.respostas, null, 2));

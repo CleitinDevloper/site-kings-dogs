@@ -199,28 +199,19 @@ app.post("/generate-payment", async (req, res) => {
 
         const data = response.data;
 
-        var codigoPedido
         const mp_id = ""+data.id+"";
         const status = data.status;
 
         const qrCodeBase64 = data.point_of_interaction?.transaction_data?.qr_code_base64;
         const qrCodeText = data.point_of_interaction?.transaction_data?.qr_code;
 
-        connection.query(`INSERT INTO pedidos (codigo_mp, codigo_token, status, nome_cliente, email_cliente, pedido)
-        VALUES (${mp_id}, ${pedido_id}, ${status}, ${nome}, ${email}, ${cart})`,
-            (err, results) => {
-                if (err){
-                    console.log("Erro: "+ err)
-                    return res.status(500).json({
-                        status: "fail",
-                        message: "Erro ao gerar pagamento",
-                        details: e.response?.data || e.message
-                    });
-                };
-
-                codigoPedido = results.insertId;
-            }
+        const [results] = await connection.query(
+            `INSERT INTO pedidos (codigo_mp, codigo_token, status, nome_cliente, email_cliente, pedido) 
+            VALUES (?, ?, ?, ?, ?, ?)`,
+            [mp_id, pedido_id, status, nome, email, JSON.stringify(cart)]
         );
+
+        const codigoPedido = results.insertId;
 
         pedidos[pedido_id] = {
             id: codigoPedido,

@@ -185,6 +185,7 @@ app.post("/generate-payment", async (req, res) => {
             email: email,
         },
         external_reference: pedido_id,
+        notification_url: `https://kingsdog.discloud.app/webhook`,
         installments: 1
     };
 
@@ -231,6 +232,28 @@ app.post("/generate-payment", async (req, res) => {
             message: "Erro ao gerar pagamento",
             details: e.response?.data || e.message
         });
+    }
+});
+
+app.post("/webhook", async (req, res) => {
+    try{
+        const paymentId = req.body.data?.id;
+        if (!paymentId) return res.sendStatus(400);
+
+        const response = await axios.get(
+            `https://api.mercadopago.com/v1/payments/${paymentId}`,
+            {
+                headers: { Authorization: `Bearer ${process.env.MP_TOKEN}` }
+            }
+        );
+
+        const data = response.data;
+
+        console.log(data);
+
+    }catch(e){
+        console.log("Erro: "+e)
+        return res.sendStatus(500);
     }
 });
 

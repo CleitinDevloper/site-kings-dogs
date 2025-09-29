@@ -42,12 +42,26 @@ async function updateItems(){
 
 document.addEventListener("DOMContentLoaded", async () => {
   await updateItems();
+
+  const id = getCookie("pedido_id");
+  const token = getCookie("pedido_token");
+
+  if (id && token){
+    console.log("[ID]: "+id)
+    console.log("[TOKEN]: "+token)
+  }
 })
 
 async function addToCart(id, obs) {
   if (storeItems[id]) {
     if (storeItems[id].quantidade > 0){
       cart.push({ id: id, nome: storeItems[id].nome, price: storeItems[id].price, img: storeItems[id].img, obs: obs })
+      
+      await Swal.fire({
+        title: "Seu item foi registrado com sucesso!",
+        icon: "success",
+        draggable: true
+      });
     } else {
       await Swal.fire({
         title: "Produto em falta no estoque.",
@@ -161,6 +175,9 @@ async function tryPayment(){
         if (data.codigo_pedido){
           document.getElementById("pedido-id").innerText = `Código do seu PEDIDO: ${data.codigo_pedido}`
         }
+
+        setCookie("pedido_id", data.codigo_pedido,7)
+        setCookie("pedido_token", data.pedido_token,7)
 
         const short = data.short_qr_display || "";
         const fullQr = data.qr_code || "";
@@ -435,16 +452,35 @@ produtosContainer.addEventListener('click', async (event) => {
       } else{
         await addToCart(itemId, []);
       }
-
-      await Swal.fire({
-        title: "Seu item foi registrado com sucesso!",
-        icon: "success",
-        draggable: true
-      });
-      
     }
   };
 });
+
+function setCookie(name, value, days = 7) {
+  let expires = "";
+  if (days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = `${name}=${encodeURIComponent(value || "")}${expires}; path=/`;
+}
+
+function getCookie(name) {
+  const nameEQ = name + "=";
+  const cookies = document.cookie.split(";");
+  for (let c of cookies) {
+    c = c.trim();
+    if (c.indexOf(nameEQ) === 0) {
+      return decodeURIComponent(c.substring(nameEQ.length));
+    }
+  }
+  return null;
+}
+
+function deleteCookie(name) {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+}
 
 document.getElementById("fechar-comprovante").addEventListener('click', (event) => {
   document.getElementById("payCard").style.display = 'none';

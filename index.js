@@ -38,6 +38,7 @@ const tablesToCreate = [
         status VARCHAR(255) NOT NULL,
         nome_cliente VARCHAR(255) NOT NULL,
         email_cliente VARCHAR(255) NOT NULL,
+        price INT NOT NULL,
         pedido JSON NOT NULL
     );`
 ];
@@ -119,6 +120,7 @@ async function updateDataServer(){
             status: x.status,
             nome_cliente: x.nome_cliente,
             email_cliente: x.email_cliente,
+            price: x.price,
             pedido: x.pedido
         };
     });
@@ -207,9 +209,9 @@ app.post("/generate-payment", async (req, res) => {
         const qrCodeText = data.point_of_interaction?.transaction_data?.qr_code;
 
         const [results] = await connection.query(
-            `INSERT INTO pedidos (codigo_mp, codigo_token, status, nome_cliente, email_cliente, pedido) 
-            VALUES (?, ?, ?, ?, ?, ?)`,
-            [mp_id, pedido_id, status, nome, email, JSON.stringify(cart)]
+            `INSERT INTO pedidos (codigo_mp, codigo_token, status, nome_cliente, email_cliente, price, pedido) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [mp_id, pedido_id, status, nome, email, total, JSON.stringify(cart)]
         );
 
         const codigoPedido = results.insertId;

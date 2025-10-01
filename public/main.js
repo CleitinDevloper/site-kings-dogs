@@ -430,10 +430,11 @@ document.querySelectorAll('.tab-link').forEach((link) => {
       const itemsCount = container.children.length;
 
       for(let i = 0; i < itemsCount; i++) {
-        const sim = modal.querySelector(`#sim`);
-        const nao = modal.querySelector(`#nao`);
+        const row = container.children[i];
+        const label = row.querySelector('.item-label').textContent;
 
-        const label = container.children[i].querySelector('.item-label').textContent;
+        const sim = row.querySelector('input[value="sim"]');
+        const nao = row.querySelector('input[value="nao"]');
 
         if (sim.checked) respostas[label] = 'Sim';
         else if (nao.checked) respostas[label] = 'Não';

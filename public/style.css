@@ -272,7 +272,7 @@
       margin-bottom: 15px;
       text-align: center;
     }
-    .btn-send {
+    .modal-container.show button{
       border-radius: 30px;
       background-color: linear-gradient(135deg, #f57c00, #ffb74d);
       font-weight: bold;

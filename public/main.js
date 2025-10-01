@@ -571,6 +571,8 @@ document.getElementById("check-pagamento").addEventListener('click', async (even
 
         copiaEl.onclick = () => copyFull(copiaEl.dataset.full);
       } else{
+        deleteCookie("pedido_id");
+        deleteCookie("pedido_token")
         await Swal.fire({
           title: data.message,
           icon: "error",

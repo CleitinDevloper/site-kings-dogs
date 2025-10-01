@@ -272,6 +272,11 @@
       margin-bottom: 15px;
       text-align: center;
     }
+    .btn-send {
+      border-radius: 30px;
+      background-color: linear-gradient(135deg, #f57c00, #ffb74d);
+      font-weight: bold;
+    }
     .item-row {
       display: flex;
       align-items: center;

@@ -311,9 +311,94 @@ app.post("/webhook", async (req, res) => {
         );
 
         const data = response.data;
+        var status = ""
 
-        console.log(data);
+        var webhook = "";
+        var embed = {}
+        switch (data.status) {
+            case "approved":
+                status = "Aprovado";
+                webhook = "https://discordapp.com/api/webhooks/1423053653438234714/DOOL8nsGxXrojx6wuATz62_SxMk0TRiKyiroZen4SPDhLW-kIcdYP3U-6j3SRo7ObTgp";
+                embed = {
+                    title: `📦 Atualização Loja`,
+                    description: "Novo pagamento aprovado!",
+                    color: 0x5865f2,
+                    fields: [
+                    { name: "Numero do Pedido", value: pedidos[data.external_reference].id, inline: true },  
+                    { name: "Email do Cliente", value: data.payer.email, inline: true },
+                    { name: "Valor", value: `R$ ${data.transaction_amount}`, inline: true },
+                    { name: "Status", value: data.status, inline: true },
+                    { name: "Ticket MP", value: `[Ticket Mercado Pago](${data.transaction_data.ticket_url})`, inline: true },
+                    { name: "Comprovante PDF", value: `[Abrir recibo](https://www.mercadopago.com.br/money-out/transfer/api/receipt/pix_pdf/${data.id}/pix_account/pix_payment.pdf)` },
+                    ],
+                    footer: { text: "Kings Dog | API" },
+                    timestamp: new Date(),
+                };
+                break;
+            case "pending":
+                status = "Aguardando Pagamento";
+                webhook = "https://discordapp.com/api/webhooks/1423054635249303713/kr2hWEx1LdQwUkunjMljE-cW9jzqvDJ0M5-a2sQ3bnp8b8qTKYe5yFc-tBpmntO0hrqc";
+                embed = {
+                    title: `📦 Atualização Loja`,
+                    description: "Pagamento em aguardo!",
+                    color: 0x5865f2,
+                    fields: [
+                    { name: "Numero do Pedido", value: pedidos[data.external_reference].id, inline: true },  
+                    { name: "Email do Cliente", value: data.payer.email, inline: true },
+                    { name: "Valor", value: `R$ ${data.transaction_amount}`, inline: true },
+                    { name: "Status", value: data.status, inline: true },
+                    { name: "Ticket MP", value: `[Ticket Mercado Pago](${data.transaction_data.ticket_url})`, inline: true },
+                    { name: "Copia e Cola", value: `${data.transaction_data.qr_code}` },
+                    ],
+                    footer: { text: "Kings Dog | API" },
+                    timestamp: new Date(),
+                };
+                break;
+            case "rejected":
+                status = "Pagamento Recusado";
+                webhook = "https://discordapp.com/api/webhooks/1423054808020947035/pn1zmULuAFHPFw0xadrr7juDGA683DFhapK8QscpGDNmc62nr6qqQA2TpiL3oFUHdo77";
+                embed = {
+                    title: `📦 Atualização Loja`,
+                    description: "Pagamento Recusado!",
+                    color: 0x5865f2,
+                    fields: [
+                    { name: "Numero do Pedido", value: pedidos[data.external_reference].id, inline: true },  
+                    { name: "Email do Cliente", value: data.payer.email, inline: true },
+                    { name: "Valor", value: `R$ ${data.transaction_amount}`, inline: true },
+                    { name: "Status", value: data.status, inline: true },
+                    { name: "Ticket MP", value: `[Ticket Mercado Pago](${data.transaction_data.ticket_url})`, inline: true },
+                    ],
+                    footer: { text: "Kings Dog | API" },
+                    timestamp: new Date(),
+                };
+                break;
+            case "cancelled":
+                status = "Pagamento Cancelado";
+                webhook = "https://discordapp.com/api/webhooks/1423055189732102298/hKHaK1f5dRh6Ye_EradZpCnS6m8jNcBaBxX38-fR8l110w8eehYfmPk6h1kr7weV7lzx";
+                embed = {
+                    title: `📦 Atualização Loja`,
+                    description: "Pagamento Cancelado!",
+                    color: 0x5865f2,
+                    fields: [
+                    { name: "Numero do Pedido", value: pedidos[data.external_reference].id, inline: true },    
+                    { name: "Email do Cliente", value: data.payer.email, inline: true },
+                    { name: "Valor", value: `R$ ${data.transaction_amount}`, inline: true },
+                    { name: "Status", value: data.status, inline: true },
+                    { name: "Ticket MP", value: `[Ticket Mercado Pago](${data.transaction_data.ticket_url})`, inline: true },
+                    ],
+                    footer: { text: "Kings Dog | API" },
+                    timestamp: new Date(),
+                };                
+                break;
+            default:
+                status = data.status;
+        };
 
+        await axios.post(webhook, {
+            username: "Kings API",
+            embeds: [embed],
+        });
+        
     }catch(e){
         console.log("Erro: "+e)
         return res.sendStatus(500);

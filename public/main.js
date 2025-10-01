@@ -533,6 +533,8 @@ document.getElementById("check-pagamento").addEventListener('click', async (even
     const token = getCookie("pedido_token");
 
     if (id && token){
+      console.log(id)
+      console.log(token)
       const res = await fetch("/check-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -149,6 +149,59 @@ app.post("/getItems" , (req, res) => {
     };
 });
 
+app.post("check-payment", async (req, res) => {
+    const { id, token } = req.body;
+
+    if (id && token){
+        if (pedidos[token] && pedidos[token].id == id){
+            try{
+                const response = await axios.get(
+                    `https://api.mercadopago.com/v1/payments/${pedidos[token].codigo_mp}`,
+                    {
+                        headers: { Authorization: `Bearer ${process.env.MP_TOKEN}` }
+                    }
+                );
+
+                const data = response.data;
+                var status = pedidos[token].status;
+                
+                if (data.status != pedidos[token].status && pedidos[token].status != "delivered" && pedidos[token].status != "expired"){
+                    switch (data.status) {
+                        case "approved":
+                        status = "Aprovado";
+                        break;
+                        case "pending":
+                        status = "Aguardando Pagamento";
+                        break;
+                        case "rejected":
+                        status = "Pagamento Recusado";
+                        break;
+                        case "cancelled":
+                        status = "Pagamento Cancelado";
+                        break;
+                        default:
+                        status = data.status;
+                    };
+
+                    pedidos[token].status = data.status;
+                };
+
+                const qrCodeBase64 = data.point_of_interaction?.transaction_data?.qr_code_base64;
+                const qrCodeText = data.point_of_interaction?.transaction_data?.qr_code;
+
+                return res.json({ status: "success", message: "Atualização de pagamento", codigo_pedido: pedidos[token].id, paymentStatus: status, qr_code: qrCodeText, qr_code_base64: qrCodeBase64 });
+            }catch(e){
+                console.log("Erro no Mercado PAGO: "+e)
+                return res.json({ status: "fail", message: "Erro ao encontrar seu pedido tente novamente mais tarde." });
+            }
+        } else{
+            return res.json({ status: "fail", message: "Pedido não encontrado." });
+        }
+    }else{
+        return res.json({ status: "fail", message: "Faltam informações para buscar por seu pedido." });
+    };
+});
+
 app.post("/generate-payment", async (req, res) => {
     const { cart, nome, email } = req.body;
 
@@ -162,6 +215,7 @@ app.post("/generate-payment", async (req, res) => {
         if (items[x.id]){
             if (items[x.id].quantidade > 0){
                 total += items[x.id].price;
+                items[x.id].quantidade -= 1
             } else{
                return res.json({ status: "fail", message: "Item em falta no estoque." }); 
             }

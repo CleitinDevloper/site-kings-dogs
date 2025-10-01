@@ -47,8 +47,50 @@ document.addEventListener("DOMContentLoaded", async () => {
   const token = getCookie("pedido_token");
 
   if (id && token){
-    console.log("[ID]: "+id)
-    console.log("[TOKEN]: "+token)
+      const res = await fetch("/check-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, token })
+      })
+
+      const data = await res.json()
+
+      if (data.status == "success"){
+        const div = document.getElementById("payCard")
+        const divStatus = document.getElementById("status");
+
+        div.style.display = "flex";
+        divStatus.innerText = "Status: " + data.paymentStatus;
+
+        if (data.codigo_pedido){
+          document.getElementById("pedido-id").innerText = `Código do seu PEDIDO: ${data.codigo_pedido}`
+        }
+
+        const short = data.short_qr_display || "";
+        const fullQr = data.qr_code || "";
+        const base64 = data.qr_code_base64 || "";
+
+        if (base64) {
+          document.getElementById("qrImg").src = `data:image/png;base64,${base64}`;
+        } else {
+          document.getElementById("qrImg").alt = "QR não disponível";
+        }
+
+        const copiaEl = document.getElementById("copia");
+        copiaEl.innerText = short || (fullQr.slice(0,20) + "...");
+        copiaEl.dataset.full = fullQr;
+
+        const copyBtn = document.getElementById("copyBtn");
+        copyBtn.onclick = () => copyFull(copiaEl.dataset.full);
+
+        copiaEl.onclick = () => copyFull(copiaEl.dataset.full);
+      } else{
+        await Swal.fire({
+          title: data.message,
+          icon: "error",
+          draggable: true
+        });
+      }
   }
 })
 
@@ -485,3 +527,55 @@ function deleteCookie(name) {
 document.getElementById("fechar-comprovante").addEventListener('click', (event) => {
   document.getElementById("payCard").style.display = 'none';
 })
+
+document.getElementById("check-pagamento").addEventListener('click', async (event) => {
+    const id = getCookie("pedido_id");
+    const token = getCookie("pedido_token");
+
+    if (id && token){
+      const res = await fetch("/check-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, token })
+      })
+
+      const data = await res.json()
+
+      if (data.status == "success"){
+        const div = document.getElementById("payCard")
+        const divStatus = document.getElementById("status");
+
+        div.style.display = "flex";
+        divStatus.innerText = "Status: " + data.paymentStatus;
+
+        if (data.codigo_pedido){
+          document.getElementById("pedido-id").innerText = `Código do seu PEDIDO: ${data.codigo_pedido}`
+        }
+
+        const short = data.short_qr_display || "";
+        const fullQr = data.qr_code || "";
+        const base64 = data.qr_code_base64 || "";
+
+        if (base64) {
+          document.getElementById("qrImg").src = `data:image/png;base64,${base64}`;
+        } else {
+          document.getElementById("qrImg").alt = "QR não disponível";
+        }
+
+        const copiaEl = document.getElementById("copia");
+        copiaEl.innerText = short || (fullQr.slice(0,20) + "...");
+        copiaEl.dataset.full = fullQr;
+
+        const copyBtn = document.getElementById("copyBtn");
+        copyBtn.onclick = () => copyFull(copiaEl.dataset.full);
+
+        copiaEl.onclick = () => copyFull(copiaEl.dataset.full);
+      } else{
+        await Swal.fire({
+          title: data.message,
+          icon: "error",
+          draggable: true
+        });
+      };
+  };
+});

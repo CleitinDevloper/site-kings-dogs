@@ -149,7 +149,7 @@ app.post("/getItems" , (req, res) => {
     };
 });
 
-app.post("check-payment", async (req, res) => {
+app.post("/check-payment", async (req, res) => {
     const { id, token } = req.body;
 
     if (id && token){

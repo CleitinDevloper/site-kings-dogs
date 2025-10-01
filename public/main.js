@@ -436,9 +436,9 @@ document.querySelectorAll('.tab-link').forEach((link) => {
         const sim = row.querySelector('input[value="sim"]');
         const nao = row.querySelector('input[value="nao"]');
 
-        if (sim.checked) respostas[label] = 'Sim';
-        else if (nao.checked) respostas[label] = 'Não';
-        else respostas[label] = null;
+        if (sim.checked) respostas[label] = true;
+        else if (nao.checked) respostas[label] = false;
+        else respostas[label] = false;
       }
 
       respostas['observacoes_gerais'] = textarea.value.trim();

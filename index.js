@@ -10,7 +10,6 @@ const port = 8080;
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
-// Array com queries para criar tabelas
 const tablesToCreate = [
     `CREATE TABLE IF NOT EXISTS funcionarios (
         id INT AUTO_INCREMENT PRIMARY KEY,

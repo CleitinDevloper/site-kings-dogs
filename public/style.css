@@ -271,7 +271,7 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 10px;
-      gap: 10px;
+      gap: 20px;
     }
     .item-label {
       flex: 1;

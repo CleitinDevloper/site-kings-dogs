@@ -240,6 +240,10 @@
       font-weight: bold;
     }
 
+    .items-list{
+      gap: 15px;
+    }
+
     .modal-container {
       position: fixed;
       top: 50%;
@@ -259,7 +263,9 @@
       display: none;
     }
     .modal-container.show {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      gap: 30px
     }
     .modal-container h2 {
       margin-top: 0;

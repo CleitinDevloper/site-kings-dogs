@@ -331,6 +331,7 @@ document.querySelectorAll('.tab-link').forEach((link) => {
     modal.appendChild(title);
 
     const container = document.createElement('div');
+    container.className = "items-list"
     modal.appendChild(container);
 
     const textarea = document.createElement('textarea');

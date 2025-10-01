@@ -10,6 +10,14 @@ const port = 8080;
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://static.cloudflareinsights.com"
+  );
+  next();
+});
+
 const tablesToCreate = [
     `CREATE TABLE IF NOT EXISTS funcionarios (
         id INT AUTO_INCREMENT PRIMARY KEY,

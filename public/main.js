@@ -367,8 +367,8 @@ document.querySelectorAll('.tab-link').forEach((link) => {
         const checkboxGroup = document.createElement('div');
         checkboxGroup.className = 'checkbox-group';
 
-        const simId = `sim`;
-        const naoId = `nao`;
+        const simId = `sim-${item}`;
+        const naoId = `nao-${item}`;
 
         const simLabel = document.createElement('label');
         simLabel.setAttribute('for', simId);

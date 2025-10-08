@@ -427,6 +427,7 @@ app.post("/login", (req, res) => {
 app.get("/admin", verifyToken, (req, res) => {
     res.sendFile(path.join(__dirname, "admin", "index.html"));
     res.sendFile(path.join(__dirname, "admin", "main.js"));
+    res.sendFile(path.join(__dirname, "admin", "style.css"));
 });
 
 function generateToken(tokenSize){

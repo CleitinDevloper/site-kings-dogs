@@ -10,12 +10,9 @@ const port = 8080;
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
-app.use((req, res, next) => {
-  res.setHeader(
-    "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://static.cloudflareinsights.com"
-  );
-  next();
+ app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src-elem 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com data:; img-src 'self' data: https:; connect-src 'self' https:;");
+    next();
 });
 
 const tablesToCreate = [

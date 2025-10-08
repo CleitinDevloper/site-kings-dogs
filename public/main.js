@@ -1,4 +1,4 @@
-let token = "";
+let userToken = "";
 
 let storeItems = [];
 let cart = [];
@@ -284,7 +284,7 @@ async function login() {
     const data = await res.json()
 
     if (data.status == "success") {
-      token = data.autorization;
+      localStorage.setItem("token", data.autorization);
       window.location.href = data.redirect;
     } else {
       console.log(data.message);

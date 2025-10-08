@@ -1,9 +1,5 @@
+let token = "";
 
-document.addEventListener("DOMContentLoaded", async () => {
-    console.log(token)
-})
-
-// Sample data
 let orders = [
     { id: 1, customer: 'João Silva', number: 'PED001', items: [{ name: 'Produto A', qty: 2, price: 50 }, { name: 'Produto B', qty: 1, price: 30 }], observations: [{ name: 'Pure de batata', status: 'Não' }, { name: 'Sem cebola', status: 'Sim' }], delivered: false },
     { id: 2, customer: 'Maria Santos', number: 'PED002', items: [{ name: 'Produto C', qty: 3, price: 20 }], observations: [{ name: 'Extra queijo', status: 'Não' }], delivered: false }
@@ -23,6 +19,13 @@ let products = [
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function () {
+    token = localStorage.getItem("token");
+
+    if (!token) {
+      window.location.href = "/";
+      return;
+    }
+    
     updateMetrics();
     renderOrders();
     renderEmployees();

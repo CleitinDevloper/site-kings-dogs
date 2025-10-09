@@ -12,14 +12,13 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(r => r.json())
     .then(data => {
       if (data.status != "success") {
-        localStorage.removeItem("authToken");
+        console.log('teste8769676998679')
+        localStorage.removeItem("token");
         window.location.href = "/";
       }
     })
     .catch(e => {
-        console.log('teste4')
-        console.log(e)
-        //window.location.href = "/";
+        window.location.href = "/";
     });
 });
 

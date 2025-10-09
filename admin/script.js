@@ -6,12 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  console.log(token)
+
   fetch("/check-token", {
     headers: { "x-access-token": token }
   })
     .then(r => r.json())
     .then(data => {
-        console.log(data.status)
       if (data.status != "success") {
         localStorage.removeItem("token");
         //window.location.href = "/";

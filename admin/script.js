@@ -1,32 +1,31 @@
 const token = localStorage.getItem("token");
 
-( async () => {
-    if (!token){
-        print('teste')
-        //window.location.href = "/";
-    } else {
-        print('teste2')
-        const res = await fetch("/check-token", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ token })
-        });
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("authToken");
 
-        const data = await res.json()
+  if (!token) {
+    window.location.href = "/";
+    return;
+  }
 
-        if (data.status != "success"){
-           //window.location.href = "/";
-        };
-    };
-})
-
+  // tenta validar o token no servidor antes de liberar o painel
+  fetch("/check-token", {
+    headers: { "x-access-token": token }
+  })
+    .then(r => r.json())
+    .then(data => {
+      if (data.status !== "success") {
+        localStorage.removeItem("authToken");
+        window.location.href = "/";
+      }
+    })
+    .catch(() => {
+      window.location.href = "/";
+    });
+});
 
 (() => {
-  // Dados locais (inicia com exemplos)
   let orders = [
-    // Exemplo de estrutura de um pedido
     // { id: 'PED001', customer: 'João', items: [{name:'X',qty:1,price:10}], obs: [{name:'Sem cebola', value:'Sim'}], status:'pending' }
   ];
   let employees = [

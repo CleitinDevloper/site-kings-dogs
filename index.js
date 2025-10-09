@@ -133,12 +133,6 @@ async function updateDataServer(){
 
 updateDataServer();
 
-app.use("/admin", verifyToken, express.static(path.join(__dirname, "admin")));
-
-app.get("/admin", verifyToken, (req, res) => {
-  res.sendFile(path.join(__dirname, "admin", "index.html"));
-});
-
 function verifyToken(req, res, next) {
   const token = req.query.token || req.headers["x-access-token"];
   if (token && tokensList[token]) {
@@ -148,6 +142,9 @@ function verifyToken(req, res, next) {
     res.redirect("/");
   }
 }
+
+app.use('/admin', verifyToken, express.static(path.join(__dirname, 'admin')));
+app.get('/admin', verifyToken, (req,res) => res.sendFile(path.join(__dirname, 'admin','index.html')));
 
 app.post("/getItems" , (req, res) => {
     if (items) {

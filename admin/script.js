@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
-    
+
   if (!token) {
     window.location.href = "/";
     return;
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(data => {
       if (data.status != "success") {
         localStorage.removeItem("token");
-        //window.location.href = "/";
+        window.location.href = "/";
       }
     })
     .catch(e => {

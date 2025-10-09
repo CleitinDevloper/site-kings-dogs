@@ -285,9 +285,8 @@ async function login() {
     const data = await res.json()
 
     if (data.status == "success") {
-      localStorage.setItem("token", data.autorization);
-      console.log(localStorage.getItem("token"))
-      //window.location.href = "/admin";
+      localStorage.setItem("token", data.token);
+      window.location.href = "/admin";
     } else {
       console.log(data.message);
     };

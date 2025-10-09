@@ -11,10 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
   })
     .then(r => r.json())
     .then(data => {
+        console.log(data.status)
       if (data.status != "success") {
-        console.log('teste8769676998679')
         localStorage.removeItem("token");
-        window.location.href = "/";
+        //window.location.href = "/";
       }
     })
     .catch(e => {

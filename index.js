@@ -137,6 +137,8 @@ app.use("/admin", verifyToken, express.static(path.join(__dirname, "admin")));
 
 app.get("/admin", verifyToken, (req, res) => {
   res.sendFile(path.join(__dirname, "admin", "index.html"));
+  res.sendFile(path.join(__dirname, "admin", "main.js"));
+  res.sendFile(path.join(__dirname, "admin", "style.css"));
 });
 
 function verifyToken(req, res, next) {

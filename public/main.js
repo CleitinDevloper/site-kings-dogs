@@ -286,7 +286,8 @@ async function login() {
 
     if (data.status == "success") {
       localStorage.setItem("token", data.autorization);
-      window.location.href = "/admin";
+      console.log(localStorage.getItem("token"))
+      //window.location.href = "/admin";
     } else {
       console.log(data.message);
     };

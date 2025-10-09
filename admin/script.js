@@ -1,7 +1,5 @@
-const token = localStorage.getItem("token");
-
 document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("authToken");
+  const token = localStorage.getItem("token");
 
   if (!token) {
     console.log('teste')

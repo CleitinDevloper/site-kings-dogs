@@ -103,8 +103,6 @@ async function updateDataServer(){
             newObs.push(y)
         })
 
-        console.log(newObs)
-
         items[x.id] = {
             id: x.id,
             img: x.img,
@@ -135,25 +133,21 @@ async function updateDataServer(){
 
 updateDataServer();
 
+app.use("/admin", verifyToken, express.static(path.join(__dirname, "admin")));
+
+app.get("/admin", verifyToken, (req, res) => {
+  res.sendFile(path.join(__dirname, "admin", "index.html"));
+});
+
 function verifyToken(req, res, next) {
-    const token = req.query.token || req.headers["x-access-token"];
-    if (token && tokensList[token]) {
-        res.locals.token = token;
-        next();
-    } else {
-        res.redirect("/");
-    }
+  const token = req.query.token || req.headers["x-access-token"];
+  if (token && tokensList[token]) {
+    res.locals.token = token;
+    next();
+  } else {
+    res.redirect("/");
+  }
 }
-
-app.use('/admin', (req, res, next) => {
-    verifyToken(req, res, next);
-});
-
-app.use('/admin', express.static(path.join(__dirname, "admin")));
-
-app.get("/admin", (req, res) => {
-    res.sendFile(path.join(__dirname, "admin", "index.html"));
-});
 
 app.post("/getItems" , (req, res) => {
     if (items) {
@@ -431,7 +425,7 @@ app.post("/login", (req, res) => {
     }
 });
 
-function generateToken(tokenSize){
+async function generateToken(tokenSize){
     const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_";
     let newToken = "";
 

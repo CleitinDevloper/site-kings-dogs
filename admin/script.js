@@ -1,4 +1,26 @@
-/* script.js - controlador do painel (sem inline handlers) */
+const token = localStorage.getItem("token");
+
+( async () => {
+    if (!token){
+        window.location.href = "/";
+    } else {
+        const res = await fetch("/check-token", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ token })
+        });
+
+        const data = await res.json()
+
+        if (data.status != "success"){
+            window.location.href = "/";
+        };
+    };
+})
+
+
 (() => {
   // Dados locais (inicia com exemplos)
   let orders = [

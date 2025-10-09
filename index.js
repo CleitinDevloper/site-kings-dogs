@@ -134,7 +134,7 @@ async function updateDataServer(){
 updateDataServer();
 
 function verifyToken(req, res, next) {
-  const token = req.query.token || req.headers["x-access-token"];
+  const token = req.headers["x-access-token"];
   if (token && tokensList[token]) {
     res.locals.token = token;
     next();
@@ -402,6 +402,21 @@ app.post("/webhook", async (req, res) => {
         return res.sendStatus(500);
     }
 });
+app.post("/check-token", (req, res) => {
+    const { token } = req.body;
+
+    if (tokensList[token]){
+        return res.json({
+            status: "success",
+            message: "Login realizado com sucesso"
+        });
+    } else{
+        return res.json({
+            status: "fail",
+            message: "Login invalido"
+        });
+    }
+})
 
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
@@ -411,7 +426,6 @@ app.post("/login", (req, res) => {
             return res.json({
                 status: "success",
                 message: "Login realizado com sucesso",
-                redirect: `/admin?token=${userList[username].token}`,
                 token: userList[username].token
             });
         } else{

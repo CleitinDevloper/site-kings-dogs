@@ -273,6 +273,7 @@ async function login() {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
   if (username && password) {
+    
     const res = await fetch("/login", {
       method: "POST",
       headers: {
@@ -285,7 +286,7 @@ async function login() {
 
     if (data.status == "success") {
       localStorage.setItem("token", data.autorization);
-      window.location.href = data.redirect;
+      window.location.href = "/admin";
     } else {
       console.log(data.message);
     };

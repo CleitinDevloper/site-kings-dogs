@@ -392,8 +392,9 @@ app.post("/webhook", async (req, res) => {
         return res.sendStatus(500);
     }
 });
+
 app.post("/check-token", (req, res) => {
-    const { token } = req.body;
+    const { token } = req.headers["x-access-token"] || req.body;
 
     if (tokensList[token]){
         return res.json({

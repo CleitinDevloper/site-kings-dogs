@@ -4,22 +4,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("authToken");
 
   if (!token) {
+    console.log('teste')
     window.location.href = "/";
     return;
   }
 
-  // tenta validar o token no servidor antes de liberar o painel
   fetch("/check-token", {
     headers: { "x-access-token": token }
   })
     .then(r => r.json())
     .then(data => {
       if (data.status !== "success") {
+        console.log('teste3')
         localStorage.removeItem("authToken");
         window.location.href = "/";
       }
     })
     .catch(() => {
+        console.log('teste4')
       window.location.href = "/";
     });
 });

@@ -2,8 +2,10 @@ const token = localStorage.getItem("token");
 
 ( async () => {
     if (!token){
+        print('teste')
         window.location.href = "/";
     } else {
+        print('teste2')
         const res = await fetch("/check-token", {
         method: "POST",
         headers: {

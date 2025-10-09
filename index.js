@@ -10,8 +10,8 @@ const port = 8080;
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
- app.use((req, res, next) => {
-    res.setHeader("Content-Security-Policy", "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src-elem 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com data:; img-src 'self' data: https:; connect-src 'self' https:;");
+app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src-elem 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src-attr 'self' 'unsafe-inline'; font-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com data:; img-src 'self' data: https:; connect-src 'self' https:;");
     next();
 });
 
@@ -137,13 +137,23 @@ updateDataServer();
 
 function verifyToken(req, res, next) {
     const token = req.query.token || req.headers["x-access-token"];
-
     if (token && tokensList[token]) {
+        res.locals.token = token;
         next();
     } else {
         res.redirect("/");
     }
 }
+
+app.use('/admin', (req, res, next) => {
+    verifyToken(req, res, next);
+});
+
+app.use('/admin', express.static(path.join(__dirname, "admin")));
+
+app.get("/admin", (req, res) => {
+    res.sendFile(path.join(__dirname, "admin", "index.html"));
+});
 
 app.post("/getItems" , (req, res) => {
     if (items) {
@@ -419,12 +429,6 @@ app.post("/login", (req, res) => {
     } else{
         return res.json({ status: "fail", message: "Usuário não encontrado." });
     }
-});
-
-app.get("/admin", verifyToken, (req, res) => {
-    res.sendFile(path.join(__dirname, "admin", "index.html"));
-    res.sendFile(path.join(__dirname, "admin", "main.js"));
-    res.sendFile(path.join(__dirname, "admin", "style.css"));
 });
 
 function generateToken(tokenSize){

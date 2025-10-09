@@ -1,5 +1,5 @@
-let token = "";
 
+// Funções JS para funcionalidade sem Bootstrap (evita CSP com classes)
 let orders = [
     { id: 1, customer: 'João Silva', number: 'PED001', items: [{ name: 'Produto A', qty: 2, price: 50 }, { name: 'Produto B', qty: 1, price: 30 }], observations: [{ name: 'Pure de batata', status: 'Não' }, { name: 'Sem cebola', status: 'Sim' }], delivered: false },
     { id: 2, customer: 'Maria Santos', number: 'PED002', items: [{ name: 'Produto C', qty: 3, price: 20 }], observations: [{ name: 'Extra queijo', status: 'Não' }], delivered: false }
@@ -17,20 +17,58 @@ let products = [
     { id: 3, name: 'Produto 3', image: 'https://via.placeholder.com/250x150?text=Produto+3', quantity: 20 }
 ];
 
-// Initialize
+// Inicialização
 document.addEventListener('DOMContentLoaded', function () {
     token = localStorage.getItem("token");
-
     if (!token) {
-      window.location.href = "/";
-      return;
+        window.location.href = "/";
+        return;
     }
-    
     updateMetrics();
     renderOrders();
     renderEmployees();
     renderProducts();
+    // Configurar tabs iniciais
+    switchTab('metrics');
 });
+
+// Função para alternar tabs (sem Bootstrap)
+function switchTab(tabId) {
+    // Esconder todas as tabs
+    const tabs = document.querySelectorAll('.tab-pane');
+    tabs.forEach(tab => {
+        tab.classList.remove('show', 'active', 'fade');
+    });
+    // Remover active dos links
+    const links = document.querySelectorAll('.nav-link');
+    links.forEach(link => link.classList.remove('active'));
+    // Mostrar tab selecionada
+    const activeTab = document.getElementById(tabId);
+    activeTab.classList.add('show', 'active', 'fade');
+    // Ativar link
+    const activeLink = document.getElementById(tabId + '-tab');
+    activeLink.classList.add('active');
+}
+
+// Funções para modals (sem Bootstrap)
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden'; // Previne scroll
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove('show');
+    document.body.style.overflow = 'auto';
+}
+
+// Fechar modal ao clicar fora
+window.onclick = function (event) {
+    if (event.target.classList.contains('modal')) {
+        closeModal(event.target.id);
+    }
+}
 
 function updateMetrics() {
     document.getElementById('totalOrders').textContent = orders.length;
@@ -51,7 +89,7 @@ function renderOrders() {
                             <h6>${order.customer}</h6>
                             <small class="text-muted">Pedido: ${order.number}</small>
                         </div>
-                        <span class="badge bg-${order.delivered ? 'success' : 'warning'}">${order.delivered ? 'Entregue' : 'Pendente'}</span>
+                        <span class="badge ${order.delivered ? 'bg-success' : 'bg-warning'}">${order.delivered ? 'Entregue' : 'Pendente'}</span>
                     </div>
                 `;
         ordersList.appendChild(orderDiv);
@@ -71,8 +109,8 @@ function renderEmployees() {
                             <small class="text-muted">Número: ${employee.number} | Pedidos: ${employee.ordersDelivered}</small>
                         </div>
                         <div>
-                            <button class="btn btn-outline-danger btn-sm me-2" onclick="fireEmployee(${employee.id})">Demitir</button>
-                            <button class="btn btn-outline-success btn-sm" onclick="promoteEmployee(${employee.id})">Promover</button>
+                            <button class="btn btn-outline-danger btn-sm me-2" onclick="event.stopPropagation(); fireEmployee(${employee.id})">Demitir</button>
+                            <button class="btn btn-outline-success btn-sm" onclick="event.stopPropagation(); promoteEmployee(${employee.id})">Promover</button>
                         </div>
                     </div>
                 `;
@@ -88,7 +126,7 @@ function renderProducts() {
         productDiv.className = 'product-item col-md-4 mb-4';
         productDiv.innerHTML = `
                     <div class="card">
-                        <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                        <img src="${product.image}" class="card-img-top" alt="${product.name}" style="width: 100%; height: auto;">
                         <div class="card-body text-center">
                             <h5 class="card-title">${product.name}</h5>
                             <div class="quantity-selector">
@@ -129,15 +167,19 @@ function showOrderDetails(orderId) {
                     `).join('')}
                 </ul>
             `;
-    const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
-    modal.show();
+    openModal('orderDetailsModal');
 }
 
 function deliverOrder() {
-    // In a real app, this would update the order status
     alert('Pedido marcado como entregue!');
-    bootstrap.Modal.getInstance(document.getElementById('orderDetailsModal')).hide();
+    closeModal('orderDetailsModal');
     updateMetrics();
+    // Atualize status no array se necessário
+    const modal = document.getElementById('orderDetailsModal');
+    const orderId = /* Pegue do contexto ou passe como param */ 1; // Exemplo
+    const order = orders.find(o => o.id === orderId);
+    if (order) order.delivered = true;
+    renderOrders();
 }
 
 function searchOrders() {
@@ -146,8 +188,9 @@ function searchOrders() {
         order.customer.toLowerCase().includes(searchTerm) ||
         order.number.toLowerCase().includes(searchTerm)
     );
-    // Render filtered orders (simplified)
-    renderOrders(); // In a real app, render filtered list
+    // Render filtered (simplificado; atualize orders temp)
+    orders = filteredOrders; // Para demo; use var temp em prod
+    renderOrders();
 }
 
 function searchEmployees() {
@@ -156,8 +199,8 @@ function searchEmployees() {
         employee.name.toLowerCase().includes(searchTerm) ||
         employee.number.toLowerCase().includes(searchTerm)
     );
-    // Render filtered employees (simplified)
-    renderEmployees(); // In a real app, render filtered list
+    employees = filteredEmployees; // Para demo
+    renderEmployees();
 }
 
 function addItem() {
@@ -198,13 +241,13 @@ function addObservation() {
                     </div>
                     <div class="col-md-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="obsStatus" value="Não" required>
+                            <input class="form-check-input" type="radio" name="obsStatus_${Date.now()}" value="Não" required> <!-- Nome único para radios -->
                             <label class="form-check-label">Não</label>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="obsStatus" value="Sim">
+                            <input class="form-check-input" type="radio" name="obsStatus_${Date.now()}" value="Sim">
                             <label class="form-check-label">Sim</label>
                         </div>
                         <button type="button" class="btn btn-danger btn-sm" onclick="removeObservation(this)">Remover</button>
@@ -219,17 +262,27 @@ function removeObservation(button) {
 }
 
 function saveOrder() {
-    // In a real app, collect form data and save
-    alert('Pedido salvo com sucesso!');
-    bootstrap.Modal.getInstance(document.getElementById('addOrderModal')).hide();
+    // Coleta dados do form (exemplo simples; expanda para itens/obs)
+    const customerName = document.getElementById('customerName').value;
+    const orderNumber = document.getElementById('orderNumber').value;
+    // ... Colete itens e obs dinamicamente
+    alert(`Pedido salvo: ${customerName} - ${orderNumber}`);
+    closeModal('addOrderModal');
+    // Limpe form
+    document.getElementById('addOrderForm').reset();
+    document.getElementById('itemsContainer').innerHTML = '<h6>Itens do Pedido</h6><div class="item-row mb-3"><div class="row"><!-- item inicial --></div></div>'; // Recrie inicial
+    document.getElementById('observationsContainer').innerHTML = '<h6>Observações</h6><div class="observation-row mb-3"><div class="row"><!-- obs inicial --></div></div>';
     updateMetrics();
     renderOrders();
 }
 
 function saveEmployee() {
-    // In a real app, collect form data and save
-    alert('Funcionário contratado com sucesso!');
-    bootstrap.Modal.getInstance(document.getElementById('addEmployeeModal')).hide();
+    const name = document.getElementById('employeeName').value;
+    const number = document.getElementById('employeeNumber').value;
+    // ... Outros campos
+    alert(`Funcionário contratado: ${name} - ${number}`);
+    closeModal('addEmployeeModal');
+    document.getElementById('addEmployeeForm').reset();
     renderEmployees();
 }
 
@@ -239,8 +292,12 @@ function fireEmployee(id) {
         renderEmployees();
     }
 }
-
 function promoteEmployee(id) {
     alert('Funcionário promovido!');
-    // In a real app, update employee position
+    // Em app real, atualize cargo no DB
+    const employee = employees.find(emp => emp.id === id);
+    if (employee) {
+        employee.position = 'Gerente'; // Exemplo
+        renderEmployees();
+    }
 }

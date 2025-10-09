@@ -5,7 +5,7 @@
   <link rel="icon" type="image/png" href="https://i.imgur.com/5AFEmqk.png">
   <meta name="viewport" content="width=device-width, initial-scale=0.5, minimum-scale=0.3, maximum-scale=3.0, user-scalable=yes">
   <title>King's Dog</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/public/style.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://static.cloudflareinsights.com;">
 </head>
@@ -36,11 +36,11 @@
         <button id="copyBtn" class="btn">Copiar</button>
       </div>
 
-      <div style="margin-top:10px; font-weight: bold;" class="small" id="status">NÃO FECHE ESSA ABA ATÉ RECEBER SEU PEDIDO!</div>
-      <div style="margin-top:10px" class="small" id="status">Status: aguardando</div>
+      <div class="title-bold" id="status">NÃO FECHE ESSA ABA ATÉ RECEBER SEU PEDIDO!</div>
+      <div class="small" id="status">Status: aguardando</div>
       <div class="button-style-1">
-        <button style="margin-top: 10%;" id="check-pagamento">JÁ FIZ O PAGAMENTO</button>
-        <button style="margin-top: 10%;" id="fechar-comprovante">FECHAR</button>
+        <button class="title-bold" id="check-pagamento">JÁ FIZ O PAGAMENTO</button>
+        <button class="title-bold" id="fechar-comprovante">FECHAR</button>
       </div>
     </div>
   </div>
@@ -60,7 +60,7 @@
             Combinamos inovação, dedicação e respeito ao planeta para oferecer não apenas uma refeição, mas uma causa: provar que é possível comer bem e, ao mesmo tempo, cuidar do futuro.
             Na King’s Dog, acreditamos que cada detalhe importa porque o melhor sabor é aquele que alimenta o corpo, alegra a alma e ajuda a salvar o mundo.
           </p>
-          <a href="#" class="tab-link" style="color: white; text-decoration: none;" data-tab="produtos"><button class="login button">VEJÁ NOSSOS PRODUTOS</button></a>
+          <a href="#" class="tab-link" data-tab="produtos"><button class="login button">VEJÁ NOSSOS PRODUTOS</button></a>
         </div>
       </div>
     </div>
@@ -84,13 +84,13 @@
       <h2>Login</h2>
       <p>Apenas para pessoas relacionadas a empresa</p>
       <div class="login">
-        <input type="text" style="text-align: center;" placeholder="Usuário" id="username" />
-        <input type="password" style="text-align: center;" placeholder="Senha" id="password" />
+        <input type="text" class="text-center" placeholder="Usuário" id="username" />
+        <input type="password" class="text-center" placeholder="Senha" id="password" />
         <button>Entrar</button>
       </div>
     </div>
   </div>
 
-  <script src="main.js"></script>
+  <script src="/public/main.js"></script>
 </body>
 </html>

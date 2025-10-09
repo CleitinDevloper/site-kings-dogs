@@ -11,16 +11,15 @@ document.addEventListener("DOMContentLoaded", () => {
   })
     .then(r => r.json())
     .then(data => {
-      if (data.status !== "success") {
-        console.log('teste3')
+      if (data.status != "success") {
         localStorage.removeItem("authToken");
         window.location.href = "/";
       }
     })
-    .catch((e) => {
+    .catch(e => {
         console.log('teste4')
         console.log(e)
-      window.location.href = "/";
+        //window.location.href = "/";
     });
 });
 

@@ -3,7 +3,7 @@ const token = localStorage.getItem("token");
 ( async () => {
     if (!token){
         print('teste')
-        window.location.href = "/";
+        //window.location.href = "/";
     } else {
         print('teste2')
         const res = await fetch("/check-token", {
@@ -17,7 +17,7 @@ const token = localStorage.getItem("token");
         const data = await res.json()
 
         if (data.status != "success"){
-            window.location.href = "/";
+           //window.location.href = "/";
         };
     };
 })

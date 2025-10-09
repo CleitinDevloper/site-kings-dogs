@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    console.log('teste')
     window.location.href = "/";
     return;
   }
@@ -18,8 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "/";
       }
     })
-    .catch(() => {
+    .catch((e) => {
         console.log('teste4')
+        console.log(e)
       window.location.href = "/";
     });
 });

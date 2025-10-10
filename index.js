@@ -11,9 +11,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
 app.use((req, res, next) => {
-    res.setHeader("Content-Security-Policy", "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src-elem 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src-attr 'self' 'unsafe-inline'; font-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com data:; img-src 'self' data: https:; connect-src 'self' https:;");
-    next();
+  res.setHeader("Content-Security-Policy", "default-src 'self' https: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:;");
+  next();
 });
+
 
 const tablesToCreate = [
     `CREATE TABLE IF NOT EXISTS funcionarios (
@@ -133,8 +134,24 @@ async function updateDataServer(){
 
 updateDataServer();
 
-app.use("/admin", express.static(path.join(__dirname, "admin")));
+app.use('/admin', express.static(path.join(__dirname, "admin")));
 app.get('/admin', (req,res) => res.sendFile(path.join(__dirname, 'admin','index.html')));
+
+app.post('/admin' , (req, res) => {
+    const token = req.headers["x-access-token"] || req.body.token;
+
+    if (tokensList[token]){
+        return res.json({
+            status: "success",
+            message: "Login realizado com sucesso"
+        });
+    } else{
+        return res.json({
+            status: "fail",
+            message: "Login invalido"
+        });
+    }
+});
 
 app.post("/getItems" , (req, res) => {
     if (items) {
@@ -395,9 +412,7 @@ app.post("/webhook", async (req, res) => {
 
 app.get("/check-token", (req, res) => {
     const token = req.headers["x-access-token"] || req.body.token;
-    console.log(token)
-    console.log(tokensList)
-    console.log(tokensList[token])
+
     if (tokensList[token]){
         return res.json({
             status: "success",

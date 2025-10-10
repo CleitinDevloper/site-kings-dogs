@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   fetch("/check-token", {
+    method: "GET",
     headers: { "x-access-token": token }
   })
     .then(r => r.json())

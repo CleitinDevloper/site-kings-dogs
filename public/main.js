@@ -36,7 +36,11 @@ async function updateItems(){
         });
       };
     } else {
-      console.log(data.message);
+      await Swal.fire({
+        title: data.message,
+        icon: "error",
+        draggable: true
+      });
     };
 }
 
@@ -288,7 +292,11 @@ async function login() {
       localStorage.setItem("token", data.token);
       window.location.href = "/admin";
     } else {
-      console.log(data.message);
+      await Swal.fire({
+        title: data.message,
+        icon: "error",
+        draggable: true
+      });
     };
   } else {
     alert('Por favor, preencha todos os campos.');

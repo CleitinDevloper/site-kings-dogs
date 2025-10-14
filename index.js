@@ -201,7 +201,7 @@ app.post("/check-payment", async (req, res) => {
                 const qrCodeBase64 = data.point_of_interaction?.transaction_data?.qr_code_base64;
                 const qrCodeText = data.point_of_interaction?.transaction_data?.qr_code;
 
-                return res.json({ status: "success", message: "Atualização de pagamento", codigo_pedido: pedidos[token].id, paymentStatus: status, qr_code: qrCodeText, qr_code_base64: qrCodeBase64 });
+                return res.json({ status: "success", message: "Atualização de pagamento", codigo_pedido: pedidos[token].id, paymentStatus: pedidos[token].status, qr_code: qrCodeText, qr_code_base64: qrCodeBase64 });
             }catch(e){
                 console.log("Erro no Mercado PAGO: "+e)
                 return res.json({ status: "fail", message: "Erro ao encontrar seu pedido tente novamente mais tarde." });

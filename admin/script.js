@@ -84,6 +84,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
+    q('#logoutBtn').addEventListener('click', () => {
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        localStorage.removeItem("token");
+        window.location.href = "/";
+      };
+    });
+
     q('#btnAddEmployee').addEventListener('click', () => openModalById('modalEmployee'));
     q('#saveEmployeeBtn').addEventListener('click', saveEmployee);
     qa('[data-close]').forEach(btn => {
@@ -111,6 +120,8 @@ document.addEventListener("DOMContentLoaded", () => {
         alert('Pedido marcado como entregue.');
       }
     });
+
+
 
     // search
     q('#employeeSearch')?.addEventListener('input', (e) => {

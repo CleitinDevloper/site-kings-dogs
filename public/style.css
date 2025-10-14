@@ -236,6 +236,26 @@
       box-shadow: 0 6px 15px rgba(255, 167, 38, 0.8);
     }
 
+    .button-style-2 button {
+      width: 100%;
+      padding: 15px;
+      height: 40px;
+      background: linear-gradient(135deg, #f57c00, #ffb74d);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(245, 124, 0, 0.6);
+    }
+
+    .button-style-2 button:hover {
+      background: linear-gradient(135deg, #ef6c00, #ffa726);
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(255, 167, 38, 0.8);
+    }
+
     .bolder {
       font-weight: bold;
     }

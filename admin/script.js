@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(data => {
       if (data.status == "success") {
         document.body.style.display = "block";
+        document.documentElement.style.display = "block";
       } else{
         localStorage.removeItem("token");
         window.location.href = "/";

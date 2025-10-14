@@ -12,7 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
   })
     .then(r => r.json())
     .then(data => {
-      if (data.status != "success") {
+      if (data.status == "success") {
+        document.body.style.display = "block";
+      } else{
         localStorage.removeItem("token");
         window.location.href = "/";
       }
@@ -23,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 (() => {
+
   let orders = [
     // { id: 'PED001', customer: 'João', items: [{name:'X',qty:1,price:10}], obs: [{name:'Sem cebola', value:'Sim'}], status:'pending' }
   ];

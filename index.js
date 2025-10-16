@@ -177,7 +177,7 @@ app.post("/check-payment", async (req, res) => {
                 const data = response.data;
                 var status = pedidos[token].status;
                 
-                if (data.status != pedidos[token].status && pedidos[token].status != "delivered" && pedidos[token].status != "expired"){
+                if (pedidos[token].status != "delivered" && pedidos[token].status != "expired"){
                     switch (data.status) {
                         case "approved":
                         status = "Aprovado";

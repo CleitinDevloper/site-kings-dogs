@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 (() => {
 
   let orders = [
-    // { id: 'PED001', customer: 'João', items: [{name:'X',qty:1,price:10}], obs: [{name:'Sem cebola', value:'Sim'}], status:'pending' }
+    { id: 'PED001', customer: 'João', items: [{name:'X',qty:1,price:10}, {name:'Y',qty:1,price:10}], obs: [{name:'Sem cebola', value:'Sim'}, {name:'Guardanapo', value:'Não'}], status:'Pago' }
   ];
   let employees = [
     { usuario:'joao', senha:'senha', nome:'João Silva', numero:123, cargo:'Vendedor' }

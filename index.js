@@ -289,8 +289,30 @@ app.post("/generate-payment", async (req, res) => {
             status: status,
             nome_cliente: nome,
             email_cliente: email,
+            price: total,
             pedido: cart
         };
+
+        const webhook = "https://discord.com/api/webhooks/1428173831364673678/s5nvQlN-DmQ2jM5_q43yqkrPhNPPk6kk4cfUpuAYI5MY_93BEzRDcQIuIA72TiiAWRZC";
+        const embed = {
+            title: `📦 Atualização Loja`,
+            description: "Novo pagamento gerado!",
+            color: 0x5865f2,
+            fields: [
+                { name: "Numero do Pedido", value: codigoPedido, inline: true },
+                { name: "Nome do Cliente", value: nome, inline: true },
+                { name: "Email do Cliente", value: email, inline: true },
+                { name: "Valor", value: `R$ ${total}`, inline: true },
+                { name: "Carrinho:", value: "````"+JSON.stringify(cart)+"```", inline: true },
+            ],
+            footer: { text: "Kings Dog | API" },
+            timestamp: new Date(),
+        };
+
+        await axios.post(webhook, {
+            username: "Kings API",
+            embeds: [embed],
+        });
 
         return res.json({ status: "success", message: "Pagamento gerado com sucesso!", codigo_pedido: codigoPedido, pedido_token: pedido_id, qr_code: qrCodeText, qr_code_base64: qrCodeBase64 });
     } catch(e){
@@ -320,6 +342,7 @@ app.post("/webhook", async (req, res) => {
 
         var webhook = "";
         var embed = {}
+
         switch (data.status) {
             case "approved":
                 status = "Aprovado";

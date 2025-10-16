@@ -161,6 +161,30 @@ app.post("/getItems" , (req, res) => {
     };
 });
 
+app.post("/get-pedidos" , (req, res) => {
+    const { token } = req.body;
+
+    if (tokensList[token]){
+
+        var pedidosArray = [];
+
+        Object.values(pedidos).forEach(p => {
+            pedidosArray[p.id] = {
+                id: p.id,
+                email_cliente: p.email_cliente,
+                nome_cliente: p.nome_cliente,
+                price: p.price,
+                status: p.status,
+                pedido: p.pedido
+            }
+        })
+
+        return res.json({ status: "success", pedidos: Object.values(pedidosArray), message: "Lista de Pedidos." })
+    } else{
+        return res.json({ status: "fail", message: "Login invalido" });
+    }
+});
+
 app.post("/check-payment", async (req, res) => {
     const { id, token } = req.body;
 

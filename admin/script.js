@@ -1,5 +1,7 @@
+var token = "";
+
 document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("token");
+  token = localStorage.getItem("token");
 
   if (!token) {
     window.location.href = "/";
@@ -37,6 +39,24 @@ document.addEventListener("DOMContentLoaded", () => {
     { id: 1, name: 'Hot Dog', img: 'https://via.placeholder.com/600x400?text=Hot+Dog', qty: 10 },
     { id: 2, name: 'Combo Família', img: 'https://via.placeholder.com/600x400?text=Combo', qty: 5 }
   ];
+
+  async function loadPedidos(){
+    const res = await fetch("/get-pedidos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token })
+    })
+
+    const data = await res.json();
+
+    if (data.status == "success") {
+      data.pedidos.forEach(p => {
+        console.log(p)
+      })
+    }
+  }
+
+  loadPedidos();
 
   // Helpers DOM
   const q = sel => document.querySelector(sel);

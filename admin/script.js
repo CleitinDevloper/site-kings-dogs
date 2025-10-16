@@ -267,25 +267,15 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     // observações (visual only)
     const obsList = document.createElement('div');
+
+    obsList.innerText = 'Adicione: ';
     (order.obs || []).forEach(o => {
-      const row = document.createElement('div');
-      row.style.display = 'flex';
-      row.style.justifyContent = 'space-between';
-      row.style.alignItems = 'center';
-      row.style.gap = '12px';
-      row.style.padding = '6px 0';
-      // label and two checkboxes (disabled)
-      const left = document.createElement('div');
-      left.innerHTML = `<strong>${escapeHtml(o.name)}</strong>`;
-      const right = document.createElement('div');
-      right.innerHTML = `
-        <label><input type="checkbox" ${o.value === 'Sim' ? 'checked' : ''} disabled> Sim</label>
-        <label style="margin-left:8px"><input type="checkbox" ${o.value === 'Não' ? 'checked' : ''} disabled> Não</label>
-      `;
-      row.appendChild(left);
-      row.appendChild(right);
-      obsList.appendChild(row);
+      if (o.value == "Sim"){
+        obsList.innerText += `${escapeHtml(o.name)}; `
+      }
+      //left.innerHTML = `<strong>${escapeHtml(o.name)}</strong>`;
     });
+
     body.appendChild(obsList);
 
     q('#modalBody').innerHTML = '';

@@ -351,8 +351,7 @@ textarea#importInput {
     background: #fff;
     border-radius: 12px;
     padding: 16px;
-    max-width: 720px;
-    width: 100;
+    width: 60%;
     box-shadow: 0 20px 60px rgba(2, 6, 23, 0.3);
     position: relative
 }

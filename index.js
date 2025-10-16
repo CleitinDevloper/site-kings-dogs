@@ -195,7 +195,7 @@ app.post("/check-payment", async (req, res) => {
                         status = data.status;
                     };
 
-                    pedidos[token].status = data.status;
+                    pedidos[token].status = status;
                 };
 
                 const qrCodeBase64 = data.point_of_interaction?.transaction_data?.qr_code_base64;

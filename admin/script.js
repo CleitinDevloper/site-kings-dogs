@@ -24,7 +24,7 @@ async function loadPedidos() {
 
     var newItemList = [];
 
-    data.pedidos.pedido.forEach(item => {
+    Object.values(data.pedidos.pedido).forEach(item => {
       newItemList.push({
         name: item.produto,
         qty: 1,

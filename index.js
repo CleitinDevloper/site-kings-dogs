@@ -82,7 +82,7 @@ async function updateDataServer(){
   try {
     const [funcionarios] = await connection.query(`SELECT * FROM funcionarios`);
     const [produtos] = await connection.query(`SELECT * FROM produtos`);
-    const [pedidos] = await connection.query(`SELECT * FROM pedidos`);
+    const [pedidosDB] = await connection.query(`SELECT * FROM pedidos`);
     funcionarios.forEach(x => {
         userList[x.usuario] = {
             password: x.senha,
@@ -115,7 +115,7 @@ async function updateDataServer(){
         };
     });
 
-    pedidos.forEach(x => {
+    pedidosDB.forEach(x => {
         pedidos[x.codigo_token] = {
             id: x.id,
             codigo_mp: x.codigo_mp,

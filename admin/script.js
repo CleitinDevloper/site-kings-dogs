@@ -1,7 +1,7 @@
 var token = "";
 
 let orders = [
-  { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1, price: 10 }, { name: 'Y', qty: 1, price: 10 }], obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' }
+  //{ id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' }
 ];
 let employees = [
   { usuario: 'joao', senha: 'senha', nome: 'João Silva', numero: 123, cargo: 'Vendedor' }
@@ -21,11 +21,38 @@ async function loadPedidos() {
   const data = await res.json();
 
   if (data.status == "success") {
-    data.pedidos.forEach(p => {
-      console.log(p)
+
+    var newItemList = [];
+
+    data.pedidos.pedido.forEach(item => {
+      newItemList.push({
+        name: item.produto,
+        qty: 1,
+      });
     })
-  }
-}
+
+    data.pedidos.forEach(p => {
+      const obsList = JSON.parse(p.obs);
+      var newObservations = [];
+
+      obsList.forEach(obs => {
+        newObservations.push({
+          name: obs.nome,
+          value: obs.valor == true ? "Sim" : "Não",
+        });
+      })
+
+      orders.push({
+        id: p.id,
+        customer: p.nome_cliente,
+        items: newItemList,
+        status: p.status === "approved" ? "Pago" : "Aguardando Pagamento",
+        obsgeral: obsList.observacoes_gerais,
+        obs: newObservations
+      });
+    });
+  };
+};
 
 // Helpers DOM
 const q = sel => document.querySelector(sel);
@@ -171,7 +198,7 @@ function renderOrders() {
     el.innerHTML = `
         <div class="order-meta">
           <strong>${o.customer || 'Sem nome'}</strong>
-          <div class="muted">Pedido: ${o.id} • Itens: ${o.items?.length || 0} • Valor: R$ ${calcOrderTotal(o).toFixed(2)}</div>
+          <div class="muted">Pedido: ${o.id} • Itens: ${o.items?.length || 0}</div>
         </div>
         <div>
           <span class="badge ${o.status === 'done' ? 'done' : 'pending'}">${o.status === 'done' ? 'Entregue' : 'Pendente'}</span>

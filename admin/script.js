@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-
 let orders = [
   { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1, price: 10 }, { name: 'Y', qty: 1, price: 10 }], obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' }
 ];
@@ -55,14 +54,13 @@ async function loadPedidos() {
   }
 }
 
-loadPedidos();
-
 // Helpers DOM
 const q = sel => document.querySelector(sel);
 const qa = sel => Array.from(document.querySelectorAll(sel));
 
 // Inicialização
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadPedidos();
   setupTabs();
   bindControls();
   renderAll();

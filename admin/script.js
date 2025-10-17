@@ -23,7 +23,7 @@ async function loadPedidos() {
   if (data.status == "success") {
 
     var newItemList = [];
-
+    console.log(data.pedidos.pedido);
     Object.values(data.pedidos.pedido).forEach(item => {
       newItemList.push({
         name: item.produto,
@@ -34,7 +34,7 @@ async function loadPedidos() {
     data.pedidos.forEach(p => {
       const obsList = JSON.parse(p.obs);
       var newObservations = [];
-
+      console.log(obsList);
       obsList.forEach(obs => {
         newObservations.push({
           name: obs.nome,

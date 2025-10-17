@@ -1,32 +1,5 @@
 var token = "";
 
-document.addEventListener("DOMContentLoaded", () => {
-  token = localStorage.getItem("token");
-
-  if (!token) {
-    window.location.href = "/";
-    return;
-  }
-
-  fetch("/check-token", {
-    method: "GET",
-    headers: { "x-access-token": token }
-  })
-    .then(r => r.json())
-    .then(data => {
-      if (data.status == "success") {
-        document.body.style.display = "block";
-        document.documentElement.style.display = "block";
-      } else {
-        localStorage.removeItem("token");
-        window.location.href = "/";
-      }
-    })
-    .catch(e => {
-      window.location.href = "/";
-    });
-});
-
 let orders = [
   { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1, price: 10 }, { name: 'Y', qty: 1, price: 10 }], obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' }
 ];
@@ -58,12 +31,35 @@ async function loadPedidos() {
 const q = sel => document.querySelector(sel);
 const qa = sel => Array.from(document.querySelectorAll(sel));
 
-// Inicialização
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadPedidos();
-  setupTabs();
-  bindControls();
-  renderAll();
+document.addEventListener("DOMContentLoaded", () => {
+  token = localStorage.getItem("token");
+
+  if (!token) {
+    window.location.href = "/";
+    return;
+  }
+
+  fetch("/check-token", {
+    method: "GET",
+    headers: { "x-access-token": token }
+  })
+    .then(r => r.json())
+    .then(data => {
+      if (data.status == "success") {
+        document.body.style.display = "block";
+        document.documentElement.style.display = "block";
+        loadPedidos();
+        setupTabs();
+        bindControls();
+        renderAll();
+      } else {
+        localStorage.removeItem("token");
+        window.location.href = "/";
+      }
+    })
+    .catch(e => {
+      window.location.href = "/";
+    });
 });
 
 // ---------- TABS ----------

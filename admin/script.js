@@ -22,20 +22,21 @@ async function loadPedidos() {
 
   if (data.status == "success") {
 
-    var newItemList = [];
-    console.log(data.pedidos);
-    console.log(data.pedidos.pedido);
-    Object.values(data.pedidos.pedido).forEach(item => {
-      newItemList.push({
-        name: item.produto,
-        qty: 1,
-      });
-    })
+    
 
     data.pedidos.forEach(p => {
+      var newItemList = [];
+
       const obsList = JSON.parse(p.obs);
       var newObservations = [];
-      console.log(obsList);
+      
+      p.pedido.forEach(item => {
+        newItemList.push({
+          name: item.nome,
+          qty: 1,
+        })
+      })
+
       obsList.forEach(obs => {
         newObservations.push({
           name: obs.nome,

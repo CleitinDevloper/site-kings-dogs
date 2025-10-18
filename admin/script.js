@@ -26,21 +26,22 @@ async function loadPedidos() {
 
     data.pedidos.forEach(p => {
       var newItemList = [];
-      const obsList = JSON.parse(p.pedido.obs);
       var newObservations = [];
       
       p.pedido.forEach(item => {
+        const obsList = JSON.parse(item.obs);
+
+        obsList.forEach(obs => {
+          newObservations.push({
+            name: obs.nome,
+            value: obs.valor == true ? "Sim" : "Não",
+          });
+        })
+
         newItemList.push({
           name: item.nome,
           qty: 1,
         })
-      })
-
-      obsList.forEach(obs => {
-        newObservations.push({
-          name: obs.nome,
-          value: obs.valor == true ? "Sim" : "Não",
-        });
       })
 
       orders.push({

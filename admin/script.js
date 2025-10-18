@@ -26,9 +26,7 @@ async function loadPedidos() {
 
     data.pedidos.forEach(p => {
       var newItemList = [];
-
-      console.log(p);
-      const obsList = JSON.parse(p.obs);
+      const obsList = JSON.parse(p.pedido.obs);
       var newObservations = [];
       
       p.pedido.forEach(item => {

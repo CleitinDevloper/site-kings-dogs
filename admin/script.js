@@ -23,6 +23,7 @@ async function loadPedidos() {
   if (data.status == "success") {
 
     var newItemList = [];
+    console.log(data.pedidos);
     console.log(data.pedidos.pedido);
     Object.values(data.pedidos.pedido).forEach(item => {
       newItemList.push({

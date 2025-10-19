@@ -30,6 +30,11 @@ async function loadPedidos() {
         obsList = JSON.parse(item.obs);
 
         for (const [key, value] of Object.entries(obsList)) {
+
+          if (!newObservations[item.nome]) {
+            newObservations[item.nome] = [];
+          }
+
           if (key !== "observacoes_gerais") {
             newObservations[item.nome].push({
               name: key,

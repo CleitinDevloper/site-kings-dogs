@@ -31,12 +31,14 @@ async function loadPedidos() {
       p.pedido.forEach(item => {
         const obsList = JSON.parse(item.obs);
 
-        obsList.forEach(obs => {
-          newObservations.push({
-            name: obs.nome,
-            value: obs.valor == true ? "Sim" : "Não",
-          });
-        })
+        for (const [key, value] of Object.entries(obsList)) {
+          if (key !== "observacoes_gerais") {
+            newObservations.push({
+              name: key,
+              value: value == true ? "Sim" : "Não",
+            });
+          }
+        }
 
         newItemList.push({
           name: item.nome,

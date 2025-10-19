@@ -541,11 +541,11 @@ function updateMetrics() {
   const total = totalPedidos;
   const revenue = orders.reduce((s, o) => s + calcOrderTotal(o), 0);
   q('#metricOrders').textContent = total;
-  q('#metricRevenue').textContent = 'R$ ' + revenue.toFixed(2).replace('.', ',');
+  //q('#metricRevenue').textContent = 'R$ ' + revenue.toFixed(2).replace('.', ',');
   q('#sideTotalOrders').textContent = total;
-  q('#sideRevenue').textContent = 'R$ ' + revenue.toFixed(2).replace('.', ',');
+  //q('#sideRevenue').textContent = 'R$ ' + revenue.toFixed(2).replace('.', ',');
   q('#sideEmployees').textContent = employees.length;
-  // ranking (top by items count or revenue)
+
   const ranking = employees.slice().sort((a, b) => (b.ordersDelivered || 0) - (a.ordersDelivered || 0)).slice(0, 3);
   const rk = q('#metricRanking');
   rk.innerHTML = '';

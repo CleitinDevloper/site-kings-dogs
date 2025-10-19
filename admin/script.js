@@ -31,12 +31,12 @@ async function loadPedidos() {
 
         for (const [key, value] of Object.entries(obsList)) {
           if (key !== "observacoes_gerais") {
-            newObservations.push({
+            newObservations[item.nome].push({
               name: key,
               value: value == true ? "Sim" : "Não",
             });
-          }
-        }
+          };
+        };
 
         newItemList.push({
           name: item.nome,
@@ -300,7 +300,7 @@ function openOrderModal(id) {
   // montar body
   const body = document.createElement('div');
   // detalhes
-  const itemsHtml = (order.items || []).map(it => `<li>${escapeHtml(it.name)} — Qtd: ${it.qty} — R$ ${Number(it.price).toFixed(2).replace('.', ',')}</li>`).join('');
+  const itemsHtml = (order.items || []).map(it => `<li>${escapeHtml(it.name)} — Qtd: ${it.qty}</li>`).join('');
   body.innerHTML = `
       <div><strong>Cliente:</strong> ${escapeHtml(order.customer || '')}</div>
       <div class="muted">Email: ${escapeHtml(order.email || '—')}</div>
@@ -311,12 +311,22 @@ function openOrderModal(id) {
   const obsList = document.createElement('div');
 
   obsList.innerText = 'Adicione: ';
-  (order.obs || []).forEach(o => {
+  console.log(order.obs);
+
+  /*for (const [name, values] of Object.entries(order.obs || [])) {
+    values.forEach(o => {
+      if (o.value == "Sim") {
+        obsList.innerText += `${escapeHtml(o.name)}; `
+      }
+    });
+  }*/
+
+  /*(order.obs || []).forEach(o => {
     if (o.value == "Sim") {
       obsList.innerText += `${escapeHtml(o.name)}; `
     }
     //left.innerHTML = `<strong>${escapeHtml(o.name)}</strong>`;
-  });
+  });*/
 
   body.appendChild(obsList);
 

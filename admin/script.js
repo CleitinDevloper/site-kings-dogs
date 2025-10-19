@@ -27,16 +27,17 @@ async function loadPedidos() {
       var obsList
       
       for (const [index, item] of Object.entries(p.pedido)) {
+        const num = index + 1;
         obsList = JSON.parse(item.obs);
 
         for (const [key, value] of Object.entries(obsList)) {
 
-          if (!newObservations[item.nome+""+index]) {
-            newObservations[item.nome+""+index] = [];
+          if (!newObservations[item.nome+" "+num]) {
+            newObservations[item.nome+" "+num] = [];
           }
 
           if (key !== "observacoes_gerais") {
-            newObservations[item.nome+""+index].push({
+            newObservations[item.nome+" "+num].push({
               name: key,
               value: value == true ? "Sim" : "Não",
             });
@@ -315,16 +316,22 @@ function openOrderModal(id) {
   // observações (visual only)
   const obsList = document.createElement('div');
 
-  obsList.innerText = 'Adicione: ';
+  
   console.log(order.obs);
 
-  /*for (const [name, values] of Object.entries(order.obs || [])) {
+  for (const [name, values] of Object.entries(order.obs || [])) {
     values.forEach(o => {
+      const size = obsList.innerText
+
+      if (size.length > 0) {
+        obsList.innerText += name + ": ";
+      }
+
       if (o.value == "Sim") {
         obsList.innerText += `${escapeHtml(o.name)}; `
       }
     });
-  }*/
+  }
 
   /*(order.obs || []).forEach(o => {
     if (o.value == "Sim") {

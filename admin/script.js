@@ -469,7 +469,7 @@ function normalizeOrder(o) {
     status = "Pendente"
   } else if (o.status == "Aguardando Pagamento") {
     status = "Pagando"
-  } else if (o.status == "Delivered") {
+  } else if (o.status == "Entregue") {
     status = "Entregue"
   }
 

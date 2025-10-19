@@ -13,8 +13,6 @@ let products = [
 
 async function loadPedidos() {
 
-  orders = [];
-
   const res = await fetch("/get-pedidos", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -188,16 +186,25 @@ function renderAll() {
   updateMetrics();
 }
 
+var loaded = false;
+
 async function renderOrders(filter = '') {
 
-  await loadPedidos();
+  orders = [];
+
+  if (!loaded){
+    loaded = true;
+    await loadPedidos();
+  }
 
   const container = q('#ordersContainer');
+
   container.innerHTML = '';
   if (orders.length === 0) {
     container.innerHTML = '<div class="muted">Nenhum pedido importado</div>';
     return;
   }
+
   orders.forEach(o => {
     const id = ""+o.id+""
     const customer = ""+o.customer+""
@@ -258,7 +265,11 @@ async function renderOrders(filter = '') {
       container.appendChild(el);
     };
   });
-}
+
+  await wait(5000);
+  
+  loaded = false;
+};
 
 function renderEmployees(filter = '') {
   const c = q('#employeesContainer');
@@ -560,3 +571,7 @@ window.panel = {
   orders, employees, products,
   importOrdersFromText, renderAll
 };
+
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

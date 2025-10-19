@@ -312,7 +312,7 @@ app.post("/generate-payment", async (req, res) => {
         const data = response.data;
 
         const mp_id = ""+data.id+"";
-        const status = data.status;
+        const status = "Aguardando Pagamento";
 
         const qrCodeBase64 = data.point_of_interaction?.transaction_data?.qr_code_base64;
         const qrCodeText = data.point_of_interaction?.transaction_data?.qr_code;
@@ -385,9 +385,6 @@ app.post("/webhook", async (req, res) => {
 
         var webhook = "";
         var embed = {}
-
-        pedidos[data.external_reference].status = data.status;
-        await connection.query(`UPDATE pedidos SET status = ? WHERE codigo_token = ?`, [data.status, data.external_reference]);
 
         switch (data.status) {
             case "approved":
@@ -467,6 +464,9 @@ app.post("/webhook", async (req, res) => {
             default:
                 status = data.status;
         };
+
+        pedidos[data.external_reference].status = status;
+        await connection.query(`UPDATE pedidos SET status = ? WHERE codigo_token = ?`, [status, data.external_reference]);
 
         await axios.post(webhook, {
             username: "Kings API",

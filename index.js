@@ -77,6 +77,7 @@ let userList = {};
 let tokensList = {};
 let items = {};
 let pedidos = {};
+let pedidosIds = {};
 
 async function updateDataServer(){
   try {
@@ -126,6 +127,8 @@ async function updateDataServer(){
             price: x.price,
             pedido: x.pedido
         };
+
+        pedidosIds[x.id] = x.codigo_token;
     });
   } catch (err) {
     console.error("Erro SQL:", err);
@@ -181,8 +184,24 @@ app.post("/get-pedidos" , (req, res) => {
 
         return res.json({ status: "success", pedidos: Object.values(pedidosArray), message: "Lista de Pedidos." })
     } else{
-        return res.json({ status: "fail", message: "Login invalido" });
+        return res.json({ status: "fail", message: "Login invalido." });
     }
+});
+
+app.post("/set-delivered", async (req, res) => {
+    const { token, id } = req.body;
+
+    if (tokensList[token]){
+        if (pedidosIds[id]){
+            pedidos[pedidosIds[id]].status = "Entregue";
+            await connection.query(`UPDATE pedidos SET status = ? WHERE codigo_token = ?`, ["Entregue", pedidosIds[id]]);
+            return res.json({ status: "success", message: "Status do pedido salvo com sucesso." })
+        }else {
+            return res.json({ status: "fail", message: "Pedido não encontrado." })
+        };
+    }else{
+        return res.json({ status: "fail", message: "Login invalido." });
+    };
 });
 
 app.post("/check-payment", async (req, res) => {
@@ -201,7 +220,7 @@ app.post("/check-payment", async (req, res) => {
                 const data = response.data;
                 var status = pedidos[token].status;
                 
-                if (pedidos[token].status != "delivered" && pedidos[token].status != "expired"){
+                if (pedidos[token].status != "Entregue" && pedidos[token].status != "expired"){
                     switch (data.status) {
                         case "approved":
                         status = "Aprovado";
@@ -366,6 +385,9 @@ app.post("/webhook", async (req, res) => {
 
         var webhook = "";
         var embed = {}
+
+        pedidos[data.external_reference].status = data.status;
+        await connection.query(`UPDATE pedidos SET status = ? WHERE codigo_token = ?`, [data.status, data.external_reference]);
 
         switch (data.status) {
             case "approved":

@@ -151,7 +151,7 @@ function bindControls() {
 
   // modal pedido actions
   q('#modalClose').addEventListener('click', closeAllModals);
-  q('#markDeliveredBtn').addEventListener('click', () => {
+  q('#markDeliveredBtn').addEventListener('click', async () => {
     const currentId = q('#modalOverlay').dataset.currentOrder;
     if (!currentId) return;
     const ord = orders.find(o => o.id == currentId);
@@ -160,6 +160,11 @@ function bindControls() {
       renderOrders();
       updateMetrics();
       closeAllModals();
+      const res = await fetch("/get-pedidos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, id: o.id })
+      })
       alert('Pedido marcado como entregue.');
     }
   });

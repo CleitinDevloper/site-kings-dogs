@@ -163,7 +163,7 @@ function bindControls() {
       const res = await fetch("/set-delivered", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, id: o.id })
+        body: JSON.stringify({ token, id: ord.id })
       })
       alert('Pedido marcado como entregue.');
     }

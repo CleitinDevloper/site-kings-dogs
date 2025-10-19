@@ -21,22 +21,22 @@ async function loadPedidos() {
   const data = await res.json();
 
   if (data.status == "success") {
-    data.pedidos.forEach(p => {
+    for (const [_ , p] of Object.entries(data.pedidos)) {
       var newItemList = [];
       var newObservations = [];
       var obsList
       
-      p.pedido.forEach(item => {
+      for (const [index, item] of Object.entries(p)) {
         obsList = JSON.parse(item.obs);
 
         for (const [key, value] of Object.entries(obsList)) {
 
-          if (!newObservations[item.nome]) {
-            newObservations[item.nome] = [];
+          if (!newObservations[item.nome+""+index]) {
+            newObservations[item.nome+""+index] = [];
           }
 
           if (key !== "observacoes_gerais") {
-            newObservations[item.nome].push({
+            newObservations[item.nome+""+index].push({
               name: key,
               value: value == true ? "Sim" : "Não",
             });
@@ -47,7 +47,7 @@ async function loadPedidos() {
           name: item.nome,
           qty: 1,
         })
-      })
+      }
 
       orders.push({
         id: p.id,
@@ -57,7 +57,7 @@ async function loadPedidos() {
         obsgeral: obsList.observacoes_gerais,
         obs: newObservations
       });
-    });
+    };
   };
 };
 

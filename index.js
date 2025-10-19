@@ -195,6 +195,25 @@ app.post("/set-delivered", async (req, res) => {
         if (pedidosIds[id]){
             pedidos[pedidosIds[id]].status = "Entregue";
             await connection.query(`UPDATE pedidos SET status = ? WHERE codigo_token = ?`, ["Entregue", pedidosIds[id]]);
+
+            const webhook = "https://discord.com/api/webhooks/1429616459486859265/ZoZyKYAUycj4wC3DDH-jwh_yHL1bCFgv42OdkrApActNG1f-CRgUq4zvsPPURLqR6C4G";
+            const embed = {
+                title: `📦 LOG FUNCIONARIO`,
+                description: "Atualização de pedido para entregue!",
+                color: 0x5865f2,
+                fields: [
+                    { name: "Funcionario", value: userList[tokensList[token]].nome, inline: true },
+                    { name: "Pedido", value: pedidosIds[id], inline: true },
+                ],
+                footer: { text: "Kings Dog | API" },
+                timestamp: new Date(),
+            };
+
+            await axios.post(webhook, {
+                username: "Kings API",
+                embeds: [embed],
+            });
+
             return res.json({ status: "success", message: "Status do pedido salvo com sucesso." })
         }else {
             return res.json({ status: "fail", message: "Pedido não encontrado." })

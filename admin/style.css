@@ -175,7 +175,9 @@ body {
     background: var(--card);
     border-radius: 12px;
     padding: 14px;
-    box-shadow: 0 10px 30px rgba(8, 15, 30, 0.04)
+    box-shadow: 0 10px 30px rgba(8, 15, 30, 0.04);
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .metric {

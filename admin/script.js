@@ -1,24 +1,6 @@
 var token = "";
 
 let orders = [
-  { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-    { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-      { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-        { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-          { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-            { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-              { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-                { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-                  { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-                    { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-                      { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-                        { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-                          { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-                            { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-                              { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-                                { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-                                  { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
-                                    { id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' },
   //{ id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' }
 ];
 let employees = [

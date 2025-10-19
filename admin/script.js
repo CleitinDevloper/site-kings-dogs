@@ -199,9 +199,9 @@ async function renderOrders(filter = '') {
     return;
   }
   orders.forEach(o => {
-    const id = o.id
-    const customer = o.customer
-    const email = o.email
+    const id = ""+o.id+""
+    const customer = ""+o.customer+""
+    const email = ""+o.email+""
     if (filter == ''){
       if (o.status == "Aprovado"){
         const el = document.createElement('div');

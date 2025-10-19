@@ -56,6 +56,7 @@ async function loadPedidos() {
       orders.push({
         id: p.id,
         customer: p.nome_cliente,
+        email: p.email_cliente,
         items: newItemList,
         status: p.status === "approved" ? "Pago" : "Aguardando Pagamento",
         obsgeral: obsList.observacoes_gerais,
@@ -130,14 +131,6 @@ function bindControls() {
     updateMetrics();
   });
 
-  q('#clearOrdersBtn').addEventListener('click', () => {
-    if (confirm('Limpar todos os pedidos da lista?')) {
-      orders = [];
-      renderOrders();
-      updateMetrics();
-    }
-  });
-
   q('#logoutBtn').addEventListener('click', () => {
     const token = localStorage.getItem("token");
 
@@ -182,6 +175,9 @@ function bindControls() {
   q('#productSearch')?.addEventListener('input', (e) => {
     renderStock(e.target.value.trim().toLowerCase());
   });
+  q('#pedidoseSearch')?.addEventListener('input', (e) => {
+    renderOrders(e.target.value.trim().toLowerCase());
+  });
 }
 
 // ---------- Renderers ----------
@@ -192,7 +188,7 @@ function renderAll() {
   updateMetrics();
 }
 
-async function renderOrders() {
+async function renderOrders(filter = '') {
 
   await loadPedidos();
 
@@ -203,31 +199,61 @@ async function renderOrders() {
     return;
   }
   orders.forEach(o => {
-    const el = document.createElement('div');
-    el.className = 'order-card';
-    el.dataset.id = o.id;
+    if (filter == ''){
+      if (o.status == "Aprovado"){
+        const el = document.createElement('div');
+        el.className = 'order-card';
+        el.dataset.id = o.id;
 
-    var status
+        var status
 
-    if (o.status == "Aprovado") {
-      status = "Pendente"
-    } else if(o.status == "Aguardando Pagamento"){
-      status = "Pagando"
-    } else if(o.status == "Entregue"){
-      status = "Entregue"
-    }
+        if (o.status == "Aprovado") {
+          status = "Pendente"
+        } else if(o.status == "Aguardando Pagamento"){
+          status = "Pagando"
+        } else if(o.status == "Entregue"){
+          status = "Entregue"
+        }
 
-    el.innerHTML = `
-        <div class="order-meta">
-          <strong>${o.customer || 'Sem nome'}</strong>
-          <div class="muted">Pedido: ${o.id} • Itens: ${o.items?.length || 0}</div>
-        </div>
-        <div>
-          <span class="badge ${status}">${status}</span>
-        </div>
-      `;
-    el.addEventListener('click', () => openOrderModal(o.id));
-    container.appendChild(el);
+        el.innerHTML = `
+            <div class="order-meta">
+              <strong>${o.customer || 'Sem nome'}</strong>
+              <div class="muted">Pedido: ${o.id} • Itens: ${o.items?.length || 0}</div>
+            </div>
+            <div>
+              <span class="badge ${status}">${status}</span>
+            </div>
+          `;
+        el.addEventListener('click', () => openOrderModal(o.id));
+        container.appendChild(el);
+      };
+    } else if(o.id.includes(filter) || o.customer.includes(filter) || o.email.includes(filter)) {
+      const el = document.createElement('div');
+      el.className = 'order-card';
+      el.dataset.id = o.id;
+
+      var status
+
+      if (o.status == "Aprovado") {
+        status = "Pendente"
+      } else if (o.status == "Aguardando Pagamento") {
+        status = "Pagando"
+      } else if (o.status == "Entregue") {
+        status = "Entregue"
+      }
+
+      el.innerHTML = `
+            <div class="order-meta">
+              <strong>${o.customer || 'Sem nome'}</strong>
+              <div class="muted">Pedido: ${o.id} • Itens: ${o.items?.length || 0}</div>
+            </div>
+            <div>
+              <span class="badge ${status}">${status}</span>
+            </div>
+          `;
+      el.addEventListener('click', () => openOrderModal(o.id));
+      container.appendChild(el);
+    };
   });
 }
 

@@ -293,13 +293,19 @@ textarea#importInput {
     font-size: 12px
 }
 
-.badge.pending {
+.badge.Pagando{
+    background: #fff7ed;
+    color: #b40909;
+    border: 1px solid rgba(180, 83, 9, 0.06)
+}
+
+.badge.Pendente {
     background: #fff7ed;
     color: #b45309;
     border: 1px solid rgba(180, 83, 9, 0.06)
 }
 
-.badge.done {
+.badge.Entregue {
     background: #ecfdf5;
     color: #065f46;
     border: 1px solid rgba(6, 95, 70, 0.06)

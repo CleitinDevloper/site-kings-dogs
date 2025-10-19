@@ -203,13 +203,24 @@ function renderOrders() {
     const el = document.createElement('div');
     el.className = 'order-card';
     el.dataset.id = o.id;
+
+    var status
+
+    if (o.status == "Aprovado") {
+      o.status = "Pendente"
+    } else if(o.status == "Aguardando Pagamento"){
+      o.status = "Pagando"
+    } else if(o.status == "Delivered"){
+      o.status = "Entregue"
+    }
+
     el.innerHTML = `
         <div class="order-meta">
           <strong>${o.customer || 'Sem nome'}</strong>
           <div class="muted">Pedido: ${o.id} • Itens: ${o.items?.length || 0}</div>
         </div>
         <div>
-          <span class="badge ${o.status === 'done' ? 'done' : 'pending'}">${o.status === 'done' ? 'Entregue' : 'Pendente'}</span>
+          <span class="badge ${status}">${status}</span>
         </div>
       `;
     el.addEventListener('click', () => openOrderModal(o.id));
@@ -313,11 +324,8 @@ function openOrderModal(id) {
       <div style="margin-top:8px"><strong>Itens:</strong><ul>${itemsHtml}</ul></div>
       <div style="margin-top:8px"><strong>Observações:</strong></div>
     `;
-  // observações (visual only)
   const obsList = document.createElement('div');
 
-  
-  console.log(order.obs);
 
   for (const [name, values] of Object.entries(order.obs || [])) {
     values.forEach(o => {
@@ -335,20 +343,13 @@ function openOrderModal(id) {
     });
   }
 
-  /*(order.obs || []).forEach(o => {
-    if (o.value == "Sim") {
-      obsList.innerText += `${escapeHtml(o.name)}; `
-    }
-    //left.innerHTML = `<strong>${escapeHtml(o.name)}</strong>`;
-  });*/
-
   body.appendChild(obsList);
 
   q('#modalBody').innerHTML = '';
   q('#modalBody').appendChild(body);
 
   // limpar textarea
-  q('#modalGeneralObs').value = order.generalObs || '';
+  q('#modalGeneralObs').value = order.obsgeral || '';
 
   openModalById('modalOverlay');
 }

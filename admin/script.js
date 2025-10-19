@@ -21,15 +21,13 @@ async function loadPedidos() {
   const data = await res.json();
 
   if (data.status == "success") {
-
-    
-
     data.pedidos.forEach(p => {
       var newItemList = [];
       var newObservations = [];
+      var obsList
       
       p.pedido.forEach(item => {
-        const obsList = JSON.parse(item.obs);
+        obsList = JSON.parse(item.obs);
 
         for (const [key, value] of Object.entries(obsList)) {
           if (key !== "observacoes_gerais") {

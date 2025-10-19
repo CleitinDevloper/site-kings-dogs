@@ -176,7 +176,7 @@ body {
     border-radius: 12px;
     padding: 14px;
     box-shadow: 0 10px 30px rgba(8, 15, 30, 0.04);
-    max-height: 300px;
+    max-height: 500px;
     overflow-y: auto;
 }
 

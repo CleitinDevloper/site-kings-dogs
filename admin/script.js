@@ -12,6 +12,9 @@ let products = [
 ];
 
 async function loadPedidos() {
+
+  orders = [];
+
   const res = await fetch("/get-pedidos", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -83,7 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.status == "success") {
         document.body.style.display = "block";
         document.documentElement.style.display = "block";
-        loadPedidos();
         setupTabs();
         bindControls();
         renderAll();
@@ -164,7 +166,7 @@ function bindControls() {
     const currentId = q('#modalOverlay').dataset.currentOrder;
     if (!currentId) return;
     const ord = orders.find(o => o.id == currentId);
-    if (ord) {
+    if (ord && ord.status == 'Aprovado') {
       ord.status = 'Entregue';
       renderOrders();
       updateMetrics();
@@ -190,7 +192,10 @@ function renderAll() {
   updateMetrics();
 }
 
-function renderOrders() {
+async function renderOrders() {
+
+  await loadPedidos();
+
   const container = q('#ordersContainer');
   container.innerHTML = '';
   if (orders.length === 0) {

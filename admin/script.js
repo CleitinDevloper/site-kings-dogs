@@ -163,10 +163,7 @@ function bindControls() {
   q('#markDeliveredBtn').addEventListener('click', () => {
     const currentId = q('#modalOverlay').dataset.currentOrder;
     if (!currentId) return;
-
-    console.log(orders)
-
-    const ord = orders.find(o => o.id === currentId);
+    const ord = orders.find(o => o.id == currentId);
     if (ord) {
       ord.status = 'Entregue';
       renderOrders();

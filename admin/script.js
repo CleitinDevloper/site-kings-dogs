@@ -1,5 +1,7 @@
 var token = "";
 
+
+let totalPedidos = 0;
 let orders = [
   //{ id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' }
 ];
@@ -14,6 +16,7 @@ let products = [
 async function loadPedidos() {
 
   orders = [];
+  totalPedidos = 0;
 
   const res = await fetch("/get-pedidos", {
     method: "POST",
@@ -25,6 +28,7 @@ async function loadPedidos() {
 
   if (data.status == "success") {
     for (const [_ , p] of Object.entries(data.pedidos)) {
+      totalPedidos += 1;
       var newItemList = [];
       var newObservations = [];
       var obsList
@@ -124,15 +128,6 @@ function setupTabs() {
 
 // ---------- Bind botões e ações ----------
 function bindControls() {
-  q('#importBtn').addEventListener('click', () => {
-    const text = q('#importInput').value.trim();
-    if (!text) return alert('Cole as informações dos pedidos no campo acima antes de importar.');
-    importOrdersFromText(text);
-    q('#importInput').value = '';
-    renderOrders();
-    updateMetrics();
-  });
-
   q('#logoutBtn').addEventListener('click', () => {
     const token = localStorage.getItem("token");
 
@@ -152,7 +147,6 @@ function bindControls() {
   q('#btnAddProduct')?.addEventListener('click', () => openModalById('modalProduct'));
   q('#refreshBtn')?.addEventListener('click', () => {
     renderAll();
-    alert('Interface atualizada (dados locais).');
   });
 
   // modal pedido actions
@@ -539,7 +533,7 @@ function closeAllModals() {
 
 // ---------- Metrics ----------
 function updateMetrics() {
-  const total = orders.length;
+  const total = totalPedidos;
   const revenue = orders.reduce((s, o) => s + calcOrderTotal(o), 0);
   q('#metricOrders').textContent = total;
   q('#metricRevenue').textContent = 'R$ ' + revenue.toFixed(2).replace('.', ',');

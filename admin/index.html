@@ -44,10 +44,10 @@
           <strong>Total pedidos</strong>
           <div id="sideTotalOrders" class="big">0</div>
         </div>
-        <div class="card small">
+        <!--<div class="card small">
           <strong>Receita (R$)</strong>
           <div id="sideRevenue" class="big">R$ 0,00</div>
-        </div>
+        </div>-->
         <div class="card small">
           <strong>Funcionários</strong>
           <div id="sideEmployees" class="big">0</div>
@@ -63,10 +63,10 @@
             <div id="metricOrders" class="metric-value">0</div>
           </div>
 
-          <div class="card metric">
+          <!--<div class="card metric">
             <div class="metric-header">Receita (R$)</div>
             <div id="metricRevenue" class="metric-value">R$ 0,00</div>
-          </div>
+          </div>-->
 
           <div class="card metric">
             <div class="metric-header">Ranking - Top 3</div>
@@ -86,10 +86,9 @@
 
       <section id="tab-orders" class="panel" role="tabpanel" aria-hidden="true">
         <div class="panel-actions">
-          <textarea id="importInput" placeholder="Cole aqui sua lista de pedidos (HTML / JSON / linhas separadas)."></textarea>
           <div class="controls">
-            <button id="importBtn" class="btn"><i class="fa-solid fa-file-import"></i> Importar Pedidos</button>
             <input id="pedidoseSearch" class="input" placeholder="Buscar pedidos..." />
+            <button id="refreshBtn" class="btn small"><i class="fa-solid fa-arrows-rotate"></i> Atualizar</button>
           </div>
         </div>
 

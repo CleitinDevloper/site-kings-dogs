@@ -199,6 +199,9 @@ async function renderOrders(filter = '') {
     return;
   }
   orders.forEach(o => {
+    const id = o.id
+    const customer = o.customer
+    const email = o.email
     if (filter == ''){
       if (o.status == "Aprovado"){
         const el = document.createElement('div');
@@ -227,7 +230,7 @@ async function renderOrders(filter = '') {
         el.addEventListener('click', () => openOrderModal(o.id));
         container.appendChild(el);
       };
-    } else if(o.id.includes(filter) || o.customer.includes(filter) || o.email.includes(filter)) {
+    } else if(id.includes(filter) || customer.includes(filter) || email.includes(filter)) {
       const el = document.createElement('div');
       el.className = 'order-card';
       el.dataset.id = o.id;

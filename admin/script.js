@@ -165,7 +165,7 @@ function bindControls() {
     if (!currentId) return;
     const ord = orders.find(o => o.id === currentId);
     if (ord) {
-      ord.status = 'done';
+      ord.status = 'Entregue';
       renderOrders();
       updateMetrics();
       closeAllModals();
@@ -207,11 +207,11 @@ function renderOrders() {
     var status
 
     if (o.status == "Aprovado") {
-      o.status = "Pendente"
+      status = "Pendente"
     } else if(o.status == "Aguardando Pagamento"){
-      o.status = "Pagando"
+      status = "Pagando"
     } else if(o.status == "Delivered"){
-      o.status = "Entregue"
+      status = "Entregue"
     }
 
     el.innerHTML = `
@@ -426,6 +426,17 @@ function importOrdersFromText(text) {
 
 // ---------- Utils ----------
 function normalizeOrder(o) {
+
+  var status
+
+  if (o.status == "Aprovado") {
+    status = "Pendente"
+  } else if (o.status == "Aguardando Pagamento") {
+    status = "Pagando"
+  } else if (o.status == "Delivered") {
+    status = "Entregue"
+  }
+
   return {
     id: String(o.id || o.numero || randomId()),
     customer: o.customer || o.nome_cliente || o.client || 'Cliente',
@@ -433,7 +444,7 @@ function normalizeOrder(o) {
     items: Array.isArray(o.items) ? o.items.map(it => ({ name: it.name || it.prod || 'Item', qty: Number(it.qty || it.q || 1), price: Number(it.price || it.preco || 0) })) : [],
     obs: Array.isArray(o.obs) ? o.obs.map(x => ({ name: x.name || x.label || 'Obs', value: x.value || 'Não' })) : [],
     generalObs: o.generalObs || o.observacao || '',
-    status: o.status === 'done' || o.entregue ? 'done' : 'pending'
+    status: status
   };
 }
 function calcOrderTotal(o) {

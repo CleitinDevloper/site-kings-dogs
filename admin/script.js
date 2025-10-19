@@ -157,14 +157,16 @@ function bindControls() {
     const ord = orders.find(o => o.id == currentId);
     if (ord && ord.status == 'Aprovado') {
       ord.status = 'Entregue';
-      renderOrders();
       updateMetrics();
       closeAllModals();
+
       const res = await fetch("/set-delivered", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, id: ord.id })
       })
+
+      await loadPedidos();
       alert('Pedido marcado como entregue.');
     }
   });

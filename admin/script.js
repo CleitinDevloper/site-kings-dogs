@@ -13,6 +13,8 @@ let products = [
 
 async function loadPedidos() {
 
+  orders = [];
+
   const res = await fetch("/get-pedidos", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -62,6 +64,8 @@ async function loadPedidos() {
       });
     };
   };
+
+  renderOrders();
 };
 
 // Helpers DOM
@@ -180,22 +184,14 @@ function bindControls() {
 
 // ---------- Renderers ----------
 function renderAll() {
+  loadPedidos();
   renderOrders();
   renderEmployees();
   renderStock();
   updateMetrics();
 }
 
-var loaded = false;
-
 async function renderOrders(filter = '') {
-
-  orders = [];
-
-  if (!loaded){
-    loaded = true;
-    await loadPedidos();
-  }
 
   const container = q('#ordersContainer');
 
@@ -265,10 +261,6 @@ async function renderOrders(filter = '') {
       container.appendChild(el);
     };
   });
-
-  await wait(5000);
-  
-  loaded = false;
 };
 
 function renderEmployees(filter = '') {

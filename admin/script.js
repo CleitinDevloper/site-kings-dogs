@@ -26,7 +26,7 @@ async function loadPedidos() {
       var newObservations = [];
       var obsList
       
-      for (const [index, item] of Object.entries(p)) {
+      for (const [index, item] of Object.entries(p.pedido)) {
         obsList = JSON.parse(item.obs);
 
         for (const [key, value] of Object.entries(obsList)) {

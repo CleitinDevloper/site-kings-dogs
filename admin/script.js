@@ -62,7 +62,7 @@ async function loadPedidos() {
         customer: p.nome_cliente,
         email: p.email_cliente,
         items: newItemList,
-        status: p.status === "approved" ? "Pago" : "Aguardando Pagamento",
+        status: p.status === "Aprovado" ? "Aprovado" : "Aguardando Pagamento",
         obsgeral: obsList.observacoes_gerais,
         obs: newObservations
       });

@@ -160,7 +160,7 @@ function bindControls() {
       renderOrders();
       updateMetrics();
       closeAllModals();
-      const res = await fetch("/get-pedidos", {
+      const res = await fetch("/set-delivered", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, id: o.id })

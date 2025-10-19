@@ -27,7 +27,7 @@ async function loadPedidos() {
       var obsList
       
       for (const [index, item] of Object.entries(p.pedido)) {
-        const num = index + 1;
+        const num = parseInt(index) + 1;
         obsList = JSON.parse(item.obs);
 
         for (const [key, value] of Object.entries(obsList)) {
@@ -321,10 +321,12 @@ function openOrderModal(id) {
 
   for (const [name, values] of Object.entries(order.obs || [])) {
     values.forEach(o => {
-      const size = obsList.innerText
+      const text = obsList.innerText
 
-      if (size.length > 0) {
+      if (text.length <= 0) {
         obsList.innerText += name + ": ";
+      } else if (!text.includes(name)){
+        obsList.innerText += "\n" + name + ": ";
       }
 
       if (o.value == "Sim") {

@@ -436,7 +436,6 @@ app.post("/webhook", async (req, res) => {
                     { name: "Email do Cliente", value: data.payer.email, inline: true },
                     { name: "Valor", value: `R$ ${data.transaction_amount}`, inline: true },
                     { name: "Status", value: data.status, inline: true },
-                    { name: "Copia e Cola", value: `${data.transaction_data.qr_code}` },
                     ],
                     footer: { text: "Kings Dog | API" },
                     timestamp: new Date(),

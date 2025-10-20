@@ -415,7 +415,7 @@ app.post("/webhook", async (req, res) => {
                     color: 0x5865f2,
                     fields: [
                     { name: "Numero do Pedido", value: pedidos[data.external_reference].id, inline: true },  
-                    { name: "Email do Cliente", value: data.payer.email, inline: true },
+                    { name: "Email do Cliente", value: pedidos[data.external_reference].email_cliente, inline: true },
                     { name: "Valor", value: `R$ ${data.transaction_amount}`, inline: true },
                     { name: "Status", value: data.status, inline: true },
                     { name: "Comprovante PDF", value: `[Abrir recibo](https://www.mercadopago.com.br/money-out/transfer/api/receipt/pix_pdf/${data.id}/pix_account/pix_payment.pdf)` },
@@ -433,7 +433,7 @@ app.post("/webhook", async (req, res) => {
                     color: 0x5865f2,
                     fields: [
                     { name: "Numero do Pedido", value: pedidos[data.external_reference].id, inline: true },  
-                    { name: "Email do Cliente", value: data.payer.email, inline: true },
+                    { name: "Email do Cliente", value: pedidos[data.external_reference].email_cliente, inline: true },
                     { name: "Valor", value: `R$ ${data.transaction_amount}`, inline: true },
                     { name: "Status", value: data.status, inline: true },
                     ],
@@ -450,7 +450,7 @@ app.post("/webhook", async (req, res) => {
                     color: 0x5865f2,
                     fields: [
                     { name: "Numero do Pedido", value: pedidos[data.external_reference].id, inline: true },  
-                    { name: "Email do Cliente", value: data.payer.email, inline: true },
+                    { name: "Email do Cliente", value: pedidos[data.external_reference].email_cliente, inline: true },
                     { name: "Valor", value: `R$ ${data.transaction_amount}`, inline: true },
                     { name: "Status", value: data.status, inline: true },
                     ],
@@ -467,7 +467,7 @@ app.post("/webhook", async (req, res) => {
                     color: 0x5865f2,
                     fields: [
                     { name: "Numero do Pedido", value: pedidos[data.external_reference].id, inline: true },    
-                    { name: "Email do Cliente", value: data.payer.email, inline: true },
+                    { name: "Email do Cliente", value: pedidos[data.external_reference].email_cliente, inline: true },
                     { name: "Valor", value: `R$ ${data.transaction_amount}`, inline: true },
                     { name: "Status", value: data.status, inline: true },
                     ],
@@ -479,14 +479,15 @@ app.post("/webhook", async (req, res) => {
                 status = data.status;
         };
 
-        pedidos[data.external_reference].status = status;
-        await connection.query(`UPDATE pedidos SET status = ? WHERE codigo_token = ?`, [status, data.external_reference]);
+        if (status != pedidos[data.external_reference].status && status != ""){
+            pedidos[data.external_reference].status = status;
+            await connection.query(`UPDATE pedidos SET status = ? WHERE codigo_token = ?`, [status, data.external_reference]);
 
-        await axios.post(webhook, {
-            username: "Kings API",
-            embeds: [embed],
-        });
-        
+            await axios.post(webhook, {
+                username: "Kings API",
+                embeds: [embed],
+            });
+        }
     }catch(e){
         console.log("Erro: "+e)
         return res.sendStatus(500);

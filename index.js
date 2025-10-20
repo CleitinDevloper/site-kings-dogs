@@ -289,7 +289,6 @@ app.post("/generate-payment", async (req, res) => {
         if (items[x.id]){
             if (items[x.id].quantidade > 0){
                 total += items[x.id].price;
-                items[x.id].quantidade -= 1
             } else{
                return res.json({ status: "fail", message: "Item em falta no estoque." }); 
             }

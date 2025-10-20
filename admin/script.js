@@ -148,6 +148,9 @@ function bindControls() {
   q('#refreshBtn')?.addEventListener('click', () => {
     renderAll();
   });
+  q('#refreshBtn2')?.addEventListener('click', () => {
+    renderAll();
+  });
 
   // modal pedido actions
   q('#modalClose').addEventListener('click', closeAllModals);

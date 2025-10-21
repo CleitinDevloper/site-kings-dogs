@@ -144,6 +144,13 @@ async function updateCart() {
                     </div>
                 `;
   });
+
+  if (cart.length == 0){
+    document.getElementById("vaziocart").style.display = "block";
+  } else{
+    document.getElementById("vaziocart").style.display = "none";
+  }
+
   document.getElementById('total').textContent = total.toFixed(2);
 }
 
@@ -321,7 +328,10 @@ document.querySelectorAll('.tab-link').forEach((link) => {
 
     if (tabName == "produtos") {
       await updateItems();
+    } else if (tabName == "cart") {
+      await updateCart();
     }
+    
 
     document.getElementById(tab).classList.add('active');
     this.classList.add('active');

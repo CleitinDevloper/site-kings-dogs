@@ -31,6 +31,16 @@
       height: 100px;
     }
 
+    .vazio {
+      text-align: center; 
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-cart {
+      height: 150px;
+    }
+
     header h1 {
       margin: 0;
       font-size: 24px;

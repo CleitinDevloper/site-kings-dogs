@@ -22,7 +22,6 @@ async function updateItems(){
           if (!storeItems[x.id]){
             storeItems[x.id] = { nome: x.nome, price: x.price, img: x.img, desc: x.desc, quantidade: x.quantidade, obs: x.obs }
             div.innerHTML = div.innerHTML + `
-            <div class="products" id="products">
               <div class="product">
                 <img style="max-width: 150px; height: 150px" src="${x.img}" alt="Produto ${x.id}"/>
                 <h3>${x.nome}</h3>
@@ -31,7 +30,6 @@ async function updateItems(){
                 <p>Quantidade em Estoque: ${x.quantidade}</p>
                 <button item-id="${x.id}">Adicionar ao Carrinho</button> 
               </div>
-            </div>
             `;
           };
         });

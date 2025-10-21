@@ -18,7 +18,6 @@ async function updateItems(){
     if (data.status == "success") {
       const div = document.getElementById("itemsContainer");
       if (data.items){
-        div.innerHTML = `<h2>Produtos</h2>`
         Object.values(data.items).forEach(x => {
           storeItems[x.id] = { nome: x.nome, price: x.price, img: x.img, desc: x.desc, quantidade: x.quantidade, obs: x.obs }
           div.innerHTML = div.innerHTML + `

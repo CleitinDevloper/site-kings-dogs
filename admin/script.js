@@ -145,6 +145,13 @@ function bindControls() {
   qa('.modal-close').forEach(b => b.addEventListener('click', closeAllModals));
   q('#saveProductBtn')?.addEventListener('click', saveProduct);
   q('#btnAddProduct')?.addEventListener('click', () => openModalById('modalProduct'));
+  q('blockBtn')?.addEventListener('click', async () => {
+    const res = await fetch("/block-sales", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token })
+    })
+  });
   q('#refreshBtn')?.addEventListener('click', () => {
     renderAll();
   });

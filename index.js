@@ -73,6 +73,7 @@ async function createTables(tables) {
   await createTables(tablesToCreate);
 })();
 
+let salesBlocked = false;
 let userList = {};
 let tokensList = {};
 let items = {};
@@ -276,12 +277,28 @@ app.post("/check-payment", async (req, res) => {
     };
 });
 
+app.post("/block-sales", (req, res) => {
+    const { token } = req.body; 
+
+    if (!tokensList[token]){
+        return res.json({ status: "fail", message: "Login invalido." });
+    };
+
+    salesBlocked = !salesBlocked;
+
+    return res.json({ status: "success", message: salesBlocked ? "Vendas bloqueadas." : "Vendas desbloqueadas." });
+});
+
 app.post("/generate-payment", async (req, res) => {
     const { cart, nome, email } = req.body;
 
+    if(salesBlocked){
+        return res.json({ status: "fail", message: "As vendas estão temporariamente bloqueadas no momento tente novamente mais tarde." });
+    };
+
     if (nome == "" && !email.includes("@") && !email.includes(".")){
         return res.json({ status: "fail", message: "Informações faltando preencha novamente." }); 
-    }
+    };
 
     var total = 0;
 

@@ -328,10 +328,7 @@ document.querySelectorAll('.tab-link').forEach((link) => {
 
     if (tabName == "produtos") {
       await updateItems();
-    } else if (tabName == "cart") {
-      await updateCart();
     }
-    
 
     document.getElementById(tab).classList.add('active');
     this.classList.add('active');

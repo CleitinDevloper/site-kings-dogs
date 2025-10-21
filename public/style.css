@@ -106,11 +106,14 @@
     .img-icons img {
       height: 200px;
     }
-
-    .products {
+    
+    .items-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .product {

@@ -16,7 +16,7 @@ async function updateItems(){
     const data = await res.json()
 
     if (data.status == "success") {
-      const div = document.getElementById("produtos");
+      const div = document.getElementById("itemsContainer");
       if (data.items){
         div.innerHTML = `<h2>Produtos</h2>`
         Object.values(data.items).forEach(x => {

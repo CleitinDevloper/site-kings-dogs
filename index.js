@@ -240,7 +240,7 @@ app.post("/check-payment", async (req, res) => {
                 const data = response.data;
                 var status = pedidos[token].status;
                 
-                if (pedidos[token].status != "Entregue" && pedidos[token].status != "expired"){
+                if (pedidos[token].status != "Entregue"){
                     switch (data.status) {
                         case "approved":
                         status = "Aprovado";
@@ -546,7 +546,7 @@ app.post("/webhook", async (req, res) => {
                 status = data.status;
         };
 
-        if (status != pedidos[data.external_reference].status && status != ""){
+        if (status != pedidos[data.external_reference].status && status != "" && pedidos[data.external_reference].status != "Entregue"){
             pedidos[data.external_reference].status = status;
             await connection.query(`UPDATE pedidos SET status = ? WHERE codigo_token = ?`, [status, data.external_reference]);
 

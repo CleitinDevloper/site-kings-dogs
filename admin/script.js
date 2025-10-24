@@ -351,10 +351,19 @@ function renderEmployees(filter = '') {
           <strong>${emp.nome}</strong>
           <div class="muted">Usuário: ${emp.usuario} • Nº: ${emp.numero} • Cargo: ${emp.cargo}</div>
         </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn ghost small" data-action="remove" data-user="${emp.usuario}"><i class="fa-solid fa-user-minus"></i></button>
-        </div>
       `;
+
+      /*
+        const { usuario } = req.body;
+
+        if (userList[usuario]){
+            delete tokensList[userList[usuario].token];
+            delete userList[usuario];
+            return res.json({ status: "success", message: "Funcionário demitido com sucesso." })
+        } else{
+            return res.json({ status: "fail", message: "Funcionário não encontrado." })
+        };
+      */
     el.querySelector('[data-action="remove"]').addEventListener('click', (ev) => {
       ev.stopPropagation();
       if (confirm('Demitir funcionário?')) {

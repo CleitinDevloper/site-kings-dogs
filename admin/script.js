@@ -190,13 +190,13 @@ function bindControls() {
 
     const data = await res.json();
 
-    if (data.status != "success") {
+    if (data.message) {
       await Swal.fire({
         title: data.message,
         icon: "error",
         draggable: true
       });
-    }
+    };
   });
   q('#refreshBtn')?.addEventListener('click', () => {
     renderAll();

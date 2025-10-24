@@ -9,8 +9,8 @@ let employees = [
   { usuario: 'joao', nome: 'João Silva', numero: 123, cargo: 'Vendedor' }
 ];
 let products = [
-  { id: 1, name: 'Hot Dog', img: 'https://via.placeholder.com/600x400?text=Hot+Dog', qty: 10 },
-  { id: 2, name: 'Combo Família', img: 'https://via.placeholder.com/600x400?text=Combo', qty: 5 }
+  /*{ id: 1, name: 'Hot Dog', img: 'https://via.placeholder.com/600x400?text=Hot+Dog', qty: 10 },
+  { id: 2, name: 'Combo Família', img: 'https://via.placeholder.com/600x400?text=Combo', qty: 5 }*/
 ];
 
 async function loadPedidos() {
@@ -79,6 +79,9 @@ async function loadPedidos() {
 };
 
 async function loadEmployees() {
+
+  employees = [];
+
   const res = await fetch("/get-funcionarios", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -93,7 +96,7 @@ async function loadEmployees() {
         usuario: f.nome,
         nome: f.nome,
         numero: f.numero,
-        cargo: f.role
+        cargo: f.cargo
       });
     });
     renderEmployees();

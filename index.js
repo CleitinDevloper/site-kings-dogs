@@ -173,7 +173,7 @@ app.post("/get-funcionarios" , (req, res) => {
         var funcionarios = [];
 
         Object.values(userList).forEach(x => {
-            funcionarios[x.usuario] = {
+            funcionarios[x.nome] = {
                 nome: x.nome,
                 numero: x.numero,
                 vendas: x.vendas,

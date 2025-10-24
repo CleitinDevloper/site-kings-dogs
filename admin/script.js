@@ -192,6 +192,14 @@ function bindControls() {
         body: JSON.stringify({ token, id: ord.id })
       })
 
+      const free = await fetch("/free-pedido", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, id: currentPedido })
+      })
+
+      currentPedido = null;
+
       await loadPedidos();
       await Swal.fire({
         title: "Pedido marcado como entregue!",
@@ -592,6 +600,8 @@ async function closeAllModals() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ token, id: currentPedido })
   })
+
+  currentPedido = null;
 }
 
 // ---------- Metrics ----------

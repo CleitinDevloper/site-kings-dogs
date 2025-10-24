@@ -313,12 +313,12 @@ app.post("/order-status", async (req, res) => {
 
 function iniciarMonitoramento() {
     const intervalo = setInterval(() => {
-        for (const [key, value] of pedidos_em_andamento){
-            if (value > 0){
+        pedidos_em_andamento.forEach((value, key) => {
+            if (value > 0) {
                 pedidos_em_andamento[key] -= 1;
-                console.log("[DEBUG]: Pedido: "+ key +" com novo tempo de: "+ pedidos_em_andamento[key]);
-            };
-        };
+                console.log("[DEBUG]: Pedido: " + key + " com novo tempo de: " + pedidos_em_andamento[key]);
+            }
+        });
     }, 1000);
 }
 

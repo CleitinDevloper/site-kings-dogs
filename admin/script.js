@@ -363,15 +363,14 @@ function renderEmployees(filter = '') {
         } else{
             return res.json({ status: "fail", message: "Funcionário não encontrado." })
         };
-      */
-    el.querySelector('[data-action="remove"]').addEventListener('click', (ev) => {
+      el.querySelector('[data-action="remove"]').addEventListener('click', (ev) => {
       ev.stopPropagation();
       if (confirm('Demitir funcionário?')) {
         employees = employees.filter(e => e.usuario !== emp.usuario);
         loadEmployees();
         updateMetrics();
       }
-    });
+    });*/
     c.appendChild(el);
   });
 }

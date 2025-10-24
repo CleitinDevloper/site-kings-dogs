@@ -561,34 +561,44 @@ document.getElementById("check-pagamento").addEventListener('click', async (even
     const data = await res.json()
 
     if (data.status == "success") {
-      const div = document.getElementById("payCard")
-      const divStatus = document.getElementById("status");
+      if (data.paymentStatus == "Entregue") {
+        deleteCookie("pedido_id");
+        deleteCookie("pedido_token");
+        await Swal.fire({
+          title: "Pagamento já foi entregue. Obrigado!",
+          icon: "success",
+          draggable: true
+        });
+      }else{
+        const div = document.getElementById("payCard")
+        const divStatus = document.getElementById("status");
 
-      div.style.display = "flex";
-      divStatus.innerText = "Status: " + data.paymentStatus;
+        div.style.display = "flex";
+        divStatus.innerText = "Status: " + data.paymentStatus;
 
-      if (data.codigo_pedido) {
-        document.getElementById("pedido-id").innerText = `Código do seu PEDIDO: ${data.codigo_pedido}`
+        if (data.codigo_pedido) {
+          document.getElementById("pedido-id").innerText = `Código do seu PEDIDO: ${data.codigo_pedido}`
+        }
+
+        const short = data.short_qr_display || "";
+        const fullQr = data.qr_code || "";
+        const base64 = data.qr_code_base64 || "";
+
+        if (base64) {
+          document.getElementById("qrImg").src = `data:image/png;base64,${base64}`;
+        } else {
+          document.getElementById("qrImg").alt = "QR não disponível";
+        }
+
+        const copiaEl = document.getElementById("copia");
+        copiaEl.innerText = short || (fullQr.slice(0, 20) + "...");
+        copiaEl.dataset.full = fullQr;
+
+        const copyBtn = document.getElementById("copyBtn");
+        copyBtn.onclick = () => copyFull(copiaEl.dataset.full);
+
+        copiaEl.onclick = () => copyFull(copiaEl.dataset.full);
       }
-
-      const short = data.short_qr_display || "";
-      const fullQr = data.qr_code || "";
-      const base64 = data.qr_code_base64 || "";
-
-      if (base64) {
-        document.getElementById("qrImg").src = `data:image/png;base64,${base64}`;
-      } else {
-        document.getElementById("qrImg").alt = "QR não disponível";
-      }
-
-      const copiaEl = document.getElementById("copia");
-      copiaEl.innerText = short || (fullQr.slice(0, 20) + "...");
-      copiaEl.dataset.full = fullQr;
-
-      const copyBtn = document.getElementById("copyBtn");
-      copyBtn.onclick = () => copyFull(copiaEl.dataset.full);
-
-      copiaEl.onclick = () => copyFull(copiaEl.dataset.full);
     } else {
       deleteCookie("pedido_id");
       deleteCookie("pedido_token");

@@ -199,7 +199,7 @@ function bindControls() {
   qa('.modal-close').forEach(b => b.addEventListener('click', closeAllModals));
   q('#saveProductBtn')?.addEventListener('click', saveProduct);
   q('#btnAddProduct')?.addEventListener('click', () => openModalById('modalProduct'));
-  q('blockBtn')?.addEventListener('click', async () => {
+  q('#blockBtn')?.addEventListener('click', async () => {
     await fecharpedidos();
   });
   q('#refreshBtn')?.addEventListener('click', () => {

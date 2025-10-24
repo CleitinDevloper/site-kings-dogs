@@ -277,7 +277,7 @@ app.post("/check-payment", async (req, res) => {
     };
 });
 
-let pedidos_em_andamento = {};
+let pedidos_em_andamento = [];
 
 app.post("/free-pedido", (req, res) => {
     const { token, id } = req.body;

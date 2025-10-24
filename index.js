@@ -353,7 +353,7 @@ app.post("/block-sales", (req, res) => {
         return res.json({ status: "fail", message: "Login invalido." });
     };
 
-    if (userList[tokensList[token]].role !== "admin"){
+    if (userList[tokensList[token]].role !== "Admin"){
         return res.json({ status: "fail", message: "Você não tem permissão para executar essa ação." });
     }
 

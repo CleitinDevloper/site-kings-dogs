@@ -277,12 +277,63 @@ app.post("/check-payment", async (req, res) => {
     };
 });
 
+let pedidos_em_andamento = {};
+
+app.post("/free-pedido", (req, res) => {
+    const { token, id } = req.body;
+    if (!tokensList[token]){
+        return res.json({ status: "fail", message: "Login invalido." });
+    }
+
+    pedidos_em_andamento[id] = 0;
+
+    return res.json({ status: "success", message: "Pedido liberado." });
+});
+
+app.post("/order-status", async (req, res) => {
+    const { token, id } = req.body;
+
+    if (!tokensList[token]){
+        return res.json({ status: "fail", message: "Login invalido." });
+    };
+
+    pedidosIds[id] = pedidosIds[id] || null;
+
+    if (pedidosIds[id]){
+        if (!pedidos_em_andamento[id] || pedidos_em_andamento[id] <= 0){
+            pedidos_em_andamento[id] = 300;
+            return res.json({ status: "success", message: "Status do pedido em produção." });
+        } else{
+            return res.json({ status: "fail", message: "Este pedido ja está sendo preparado." });
+        }
+    } else{
+        return res.json({ status: "fail", message: "Pedido não encontrado." });
+    };
+})
+
+function iniciarMonitoramento() {
+    const intervalo = setInterval(() => {
+        for (const [key, value] of pedidos_em_andamento){
+            if (value > 0){
+                pedidos_em_andamento[key] -= 1;
+                console.log("[DEBUG]: Pedido: "+ key +" com novo tempo de: "+ pedidos_em_andamento[key]);
+            };
+        };
+    }, 1000);
+}
+
+iniciarMonitoramento();
+
 app.post("/block-sales", (req, res) => {
     const { token } = req.body; 
 
     if (!tokensList[token]){
         return res.json({ status: "fail", message: "Login invalido." });
     };
+
+    if (userList[tokensList[token]].role !== "admin"){
+        return res.json({ status: "fail", message: "Você não tem permissão para executar essa ação." });
+    }
 
     salesBlocked = !salesBlocked;
 

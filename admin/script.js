@@ -1,6 +1,6 @@
 var token = "";
 
-
+let currentPedido;
 let totalPedidos = 0;
 let orders = [
   //{ id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' }
@@ -67,6 +67,12 @@ async function loadPedidos() {
         obs: newObservations
       });
     };
+  } else {
+    await Swal.fire({
+      title: data.message,
+      icon: "error",
+      draggable: true
+    });
   };
 
   renderOrders();
@@ -151,6 +157,16 @@ function bindControls() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token })
     })
+
+    const data = await res.json();
+
+    if (data.status != "success") {
+      await Swal.fire({
+        title: data.message,
+        icon: "error",
+        draggable: true
+      });
+    }
   });
   q('#refreshBtn')?.addEventListener('click', () => {
     renderAll();
@@ -177,7 +193,11 @@ function bindControls() {
       })
 
       await loadPedidos();
-      alert('Pedido marcado como entregue.');
+      await Swal.fire({
+        title: "Pedido marcado como entregue!",
+        icon: "success",
+        draggable: true
+      });
     }
   });
 
@@ -355,49 +375,69 @@ function renderStock(filter = '') {
 }
 
 // ---------- Modal: Pedido ----------
-function openOrderModal(id) {
+async function openOrderModal(id) {
   const order = orders.find(o => o.id === id);
   if (!order) return alert('Pedido não encontrado');
-  q('#modalOverlay').dataset.currentOrder = id;
-  q('#modalTitle').textContent = `Pedido ${order.id} — ${order.customer || ''}`;
-  // montar body
-  const body = document.createElement('div');
-  // detalhes
-  const itemsHtml = (order.items || []).map(it => `<li>${escapeHtml(it.name)} — Qtd: ${it.qty}</li>`).join('');
-  body.innerHTML = `
+
+  const res = await fetch("/order-status", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, id: order.id })
+  })
+
+  const data = await res.json();
+
+  if (data.status == "success") {
+
+    currentPedido = order.id;
+
+    q('#modalOverlay').dataset.currentOrder = id;
+    q('#modalTitle').textContent = `Pedido ${order.id} — ${order.customer || ''}`;
+    // montar body
+    const body = document.createElement('div');
+    // detalhes
+    const itemsHtml = (order.items || []).map(it => `<li>${escapeHtml(it.name)} — Qtd: ${it.qty}</li>`).join('');
+    body.innerHTML = `
       <div><strong>Cliente:</strong> ${escapeHtml(order.customer || '')}</div>
       <div class="muted">Email: ${escapeHtml(order.email || '—')}</div>
       <div style="margin-top:8px"><strong>Itens:</strong><ul>${itemsHtml}</ul></div>
       <div style="margin-top:8px"><strong>Observações:</strong></div>
     `;
-  const obsList = document.createElement('div');
+    const obsList = document.createElement('div');
 
 
-  for (const [name, values] of Object.entries(order.obs || [])) {
-    values.forEach(o => {
-      const text = obsList.innerText
+    for (const [name, values] of Object.entries(order.obs || [])) {
+      values.forEach(o => {
+        const text = obsList.innerText
 
-      if (text.length <= 0) {
-        obsList.innerText += name + ": ";
-      } else if (!text.includes(name)){
-        obsList.innerText += "\n" + name + ": ";
-      }
+        if (text.length <= 0) {
+          obsList.innerText += name + ": ";
+        } else if (!text.includes(name)) {
+          obsList.innerText += "\n" + name + ": ";
+        }
 
-      if (o.value == "Sim") {
-        obsList.innerText += `${escapeHtml(o.name)}; `
-      }
+        if (o.value == "Sim") {
+          obsList.innerText += `${escapeHtml(o.name)}; `
+        }
+      });
+    }
+
+    body.appendChild(obsList);
+
+    q('#modalBody').innerHTML = '';
+    q('#modalBody').appendChild(body);
+
+    // limpar textarea
+    q('#modalGeneralObs').value = order.obsgeral || '';
+
+    openModalById('modalOverlay');
+  } else {
+    await Swal.fire({
+      title: data.message,
+      icon: "error",
+      draggable: true
     });
   }
-
-  body.appendChild(obsList);
-
-  q('#modalBody').innerHTML = '';
-  q('#modalBody').appendChild(body);
-
-  // limpar textarea
-  q('#modalGeneralObs').value = order.obsgeral || '';
-
-  openModalById('modalOverlay');
 }
 
 // ---------- Importador (tenta analisar HTML/JSON/linhas) ----------
@@ -543,9 +583,15 @@ function closeModalById(id) {
   el.classList.remove('show');
   el.setAttribute('aria-hidden', 'true');
 }
-function closeAllModals() {
+async function closeAllModals() {
   qa('.modal').forEach(m => { m.classList.remove('show'); m.setAttribute('aria-hidden', 'true'); });
   delete q('#modalOverlay').dataset.currentOrder;
+
+  const res = await fetch("/free-pedido", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, id: currentPedido })
+  })
 }
 
 // ---------- Metrics ----------

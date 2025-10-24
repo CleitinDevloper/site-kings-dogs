@@ -162,6 +162,24 @@ function setupTabs() {
   });
 }
 
+async function fecharpedidos() {
+  const res = await fetch("/block-sales", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token })
+  })
+
+  const data = await res.json();
+
+  if (data.message) {
+    await Swal.fire({
+      title: data.message,
+      icon: "error",
+      draggable: true
+    });
+  };
+}
+
 // ---------- Bind botões e ações ----------
 function bindControls() {
   q('#logoutBtn').addEventListener('click', () => {
@@ -182,21 +200,7 @@ function bindControls() {
   q('#saveProductBtn')?.addEventListener('click', saveProduct);
   q('#btnAddProduct')?.addEventListener('click', () => openModalById('modalProduct'));
   q('blockBtn')?.addEventListener('click', async () => {
-    const res = await fetch("/block-sales", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token })
-    })
-
-    const data = await res.json();
-
-    if (data.message) {
-      await Swal.fire({
-        title: data.message,
-        icon: "error",
-        draggable: true
-      });
-    };
+    await fecharpedidos();
   });
   q('#refreshBtn')?.addEventListener('click', () => {
     renderAll();

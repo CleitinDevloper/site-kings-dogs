@@ -165,6 +165,28 @@ app.post("/getItems" , (req, res) => {
     };
 });
 
+app.post("/get-funcionarios" , (req, res) => {
+    const { token } = req.body;
+
+    if (tokensList[token]){
+
+        var funcionarios = [];
+
+        Object.values(userList).forEach(x => {
+            funcionarios[x.usuario] = {
+                nome: x.nome,
+                numero: x.numero,
+                vendas: x.vendas,
+                cargo: x.role
+            }
+        })
+
+        return res.json({ status: "success", funcionarios: Object.values(funcionarios), message: "Lista de funcionarios." })
+    } else{
+        return res.json({ status: "fail", message: "Login invalido." });
+    }
+});
+
 app.post("/get-pedidos" , (req, res) => {
     const { token } = req.body;
 

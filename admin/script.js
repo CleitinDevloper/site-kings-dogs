@@ -6,7 +6,7 @@ let orders = [
   //{ id: 'PED001', customer: 'João', items: [{ name: 'X', qty: 1 }, { name: 'Y', qty: 1 }], obsgeral: "", obs: [{ name: 'Sem cebola', value: 'Sim' }, { name: 'Guardanapo', value: 'Não' }], status: 'Pago' }
 ];
 let employees = [
-  { usuario: 'joao', senha: 'senha', nome: 'João Silva', numero: 123, cargo: 'Vendedor' }
+  { usuario: 'joao', nome: 'João Silva', numero: 123, cargo: 'Vendedor' }
 ];
 let products = [
   { id: 1, name: 'Hot Dog', img: 'https://via.placeholder.com/600x400?text=Hot+Dog', qty: 10 },
@@ -78,7 +78,34 @@ async function loadPedidos() {
   renderOrders();
 };
 
-// Helpers DOM
+async function loadEmployees() {
+  const res = await fetch("/get-funcionarios", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token })
+  })
+
+  const data = await res.json();
+
+  if (data.status == "success") {
+    data.funcionarios.forEach(f => {
+      employees.push({
+        usuario: f.nome,
+        nome: f.nome,
+        numero: f.numero,
+        cargo: f.role
+      });
+    });
+    renderEmployees();
+  } else  {
+    await Swal.fire({
+      title: data.message,
+      icon: "error",
+      draggable: true
+    });
+  }
+}
+
 const q = sel => document.querySelector(sel);
 const qa = sel => Array.from(document.querySelectorAll(sel));
 
@@ -225,7 +252,7 @@ function bindControls() {
 function renderAll() {
   loadPedidos();
   renderOrders();
-  renderEmployees();
+  loadEmployees();
   renderStock();
   updateMetrics();
 }
@@ -329,7 +356,7 @@ function renderEmployees(filter = '') {
       ev.stopPropagation();
       if (confirm('Demitir funcionário?')) {
         employees = employees.filter(e => e.usuario !== emp.usuario);
-        renderEmployees();
+        loadEmployees();
         updateMetrics();
       }
     });
@@ -550,19 +577,18 @@ function escapeHtml(s) { if (!s) return ''; return String(s).replace(/[&<>"']/g,
 // ---------- Employee save ----------
 function saveEmployee() {
   const usuario = q('#emp_usuario').value.trim();
-  const senha = q('#emp_senha').value.trim();
   const nome = q('#emp_nome').value.trim();
   const numero = Number(q('#emp_numero').value) || 0;
   const cargo = q('#emp_cargo').value.trim();
-  if (!usuario || !senha || !nome || !numero || !cargo) return alert('Preencha todos os campos.');
+  if (!usuario || !nome || !numero || !cargo) return alert('Preencha todos os campos.');
   // verificar duplicado
   if (employees.some(e => e.usuario === usuario)) return alert('Usuário já existe.');
-  employees.push({ usuario, senha, nome, numero, cargo });
+  employees.push({ usuario, nome, numero, cargo });
   closeModalById('modalEmployee');
-  renderEmployees();
+  loadEmployees();
   updateMetrics();
   // limpar campos
-  q('#emp_usuario').value = ''; q('#emp_senha').value = ''; q('#emp_nome').value = ''; q('#emp_numero').value = ''; q('#emp_cargo').value = '';
+  q('#emp_usuario').value = ''; q('#emp_nome').value = ''; q('#emp_numero').value = ''; q('#emp_cargo').value = '';
 }
 
 // ---------- Product save ----------

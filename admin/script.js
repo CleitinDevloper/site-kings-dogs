@@ -31,9 +31,12 @@ async function loadPedidos() {
       totalPedidos += 1;
       var newItemList = [];
       var newObservations = [];
-      var obsList
+      var obsList = {};
       
       for (const [index, item] of Object.entries(p.pedido)) {
+        if (!item.obs || item.obs.length < 10){
+          continue;
+        }
         const num = parseInt(index) + 1;
         obsList = JSON.parse(item.obs) || {};
 

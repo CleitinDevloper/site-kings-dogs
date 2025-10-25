@@ -35,7 +35,7 @@ async function loadPedidos() {
       
       for (const [index, item] of Object.entries(p.pedido)) {
         const num = parseInt(index) + 1;
-        obsList = JSON.parse(item.obs);
+        obsList = JSON.parse(item.obs) || {};
 
         for (const [key, value] of Object.entries(obsList)) {
 
